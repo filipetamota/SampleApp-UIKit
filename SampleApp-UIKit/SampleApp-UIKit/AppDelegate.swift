@@ -9,15 +9,17 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.makeKeyAndVisible()
-        self.window = window
-        self.window?.rootViewController = HomeViewController()
+        let navcon = UINavigationController()
+        navcon.viewControllers = [HomeViewController()]
         
+        window = UIWindow()
+        
+        
+        window?.rootViewController = navcon
+        window?.makeKeyAndVisible()
         return true
     }
 
