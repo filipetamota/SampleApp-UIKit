@@ -1,2 +1,3 @@
 # SampleApp-UIKit
-A code sample app write using UIKit
+A code sample app using UIKit and the Unsplash API.
+
