@@ -8,9 +8,8 @@
 
 import UIKit
 
-protocol HomeBusinessLogic
-{
-  func doSomething(request: Home.Something.Request)
+protocol HomeBusinessLogic {
+    func fetch(query: String)
 }
 
 protocol HomeDataStore
@@ -18,20 +17,24 @@ protocol HomeDataStore
   //var name: String { get set }
 }
 
-class HomeInteractor: HomeBusinessLogic, HomeDataStore
-{
-  var presenter: HomePresentationLogic?
-  var worker: HomeWorker?
-  //var name: String = ""
+class HomeInteractor: HomeBusinessLogic, HomeDataStore {
+    var presenter: HomePresentationLogic?
+    var worker: HomeWorker?
+    typealias Request = Home.Fetch.Request
   
-  // MARK: Do something
-  
-  func doSomething(request: Home.Something.Request)
-  {
-    worker = HomeWorker()
-    worker?.doSomeWork()
-    
-    let response = Home.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
+    func fetch(query: String) {
+        
+        worker = HomeWorker()
+        
+        worker?.doSomeWork(request: Request(query: query, path: "/search/photos", method: "GET"), completion: { result in
+            switch result {
+            case .success(let response):
+                self.presenter?.present(response: response)
+            case .failure(let error):
+                self.presenter?.present(error: error)
+            }
+        })
+        
+        
+    }
 }

@@ -10,7 +10,7 @@
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-  func displaySomething(viewModel: Home.Something.ViewModel)
+  func display(viewModel: Home.Fetch.ViewModel)
 }
 
 final class HomeViewController: UIViewController, HomeDisplayLogic {
@@ -92,14 +92,12 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
   // MARK: Do something
   
   
-  func doSomething()
-  {
-    let request = Home.Something.Request()
-    interactor?.doSomething(request: request)
-  }
+    func fetch(query: String) {
+        interactor?.fetch(query: query)
+    }
   
-  func displaySomething(viewModel: Home.Something.ViewModel)
-  {
+  func display(viewModel: Home.Fetch.ViewModel) {
+      
   }
 }
 

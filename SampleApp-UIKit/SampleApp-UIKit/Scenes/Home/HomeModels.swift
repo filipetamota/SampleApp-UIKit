@@ -8,20 +8,20 @@
 
 import UIKit
 
-enum Home
-{
-  // MARK: Use cases
-  
-  enum Something
-  {
-    struct Request
-    {
+enum Home {
+    enum Fetch {
+        struct Request {
+            let query: String
+            let path: String
+            let method: String
+        }
+        
+        struct Response: Decodable {
+            
+        }
+        
+        struct ViewModel {
+            
+        }
     }
-    struct Response
-    {
-    }
-    struct ViewModel
-    {
-    }
-  }
 }

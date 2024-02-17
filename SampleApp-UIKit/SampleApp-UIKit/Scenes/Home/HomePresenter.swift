@@ -8,20 +8,20 @@
 
 import UIKit
 
-protocol HomePresentationLogic
-{
-  func presentSomething(response: Home.Something.Response)
+protocol HomePresentationLogic {
+    func present(response: Home.Fetch.Response)
+    func present(error: Error)
 }
 
-class HomePresenter: HomePresentationLogic
-{
-  weak var viewController: HomeDisplayLogic?
+class HomePresenter: HomePresentationLogic {
+    weak var viewController: HomeDisplayLogic?
   
-  // MARK: Do something
-  
-  func presentSomething(response: Home.Something.Response)
-  {
-    let viewModel = Home.Something.ViewModel()
-  //  viewController?.displaySomething(viewModel: viewModel)
-  }
+    func present(response: Home.Fetch.Response) {
+        let viewModel = Home.Fetch.ViewModel()
+        viewController?.display(viewModel: viewModel)
+    }
+    
+    func present(error: Error) {
+        
+    }
 }
