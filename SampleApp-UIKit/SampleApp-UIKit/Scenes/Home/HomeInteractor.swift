@@ -22,9 +22,7 @@ final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     typealias Request = Home.Fetch.Request
   
     func fetch(query: String) {
-        
         worker = HomeWorker()
-        
         worker?.fetch(request: Request(query: query, data: .search), completion: { result in
             switch result {
             case .success(let response):
@@ -33,7 +31,5 @@ final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
                 self.presenter?.present(error: error)
             }
         })
-        
-        
     }
 }

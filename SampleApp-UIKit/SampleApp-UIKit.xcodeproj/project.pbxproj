@@ -30,6 +30,7 @@
 		D4EA30482B84BDA3000B562E /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30472B84BDA3000B562E /* ResultCell.swift */; };
 		D4EA30502B84DBD0000B562E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA304F2B84DBD0000B562E /* String.swift */; };
 		D4EA30522B84DBE3000B562E /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30512B84DBE3000B562E /* UIImageView.swift */; };
+		D4EA30552B8518A1000B562E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30542B8518A1000B562E /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		D4EA30472B84BDA3000B562E /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		D4EA304F2B84DBD0000B562E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		D4EA30512B84DBE3000B562E /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		D4EA30542B8518A1000B562E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				D4D580BE2B7EBAAD006A5F2B /* Cells */,
 				D4D580A12B7E3306006A5F2B /* Scenes */,
 				D4EA304E2B84DB66000B562E /* Extensions */,
+				D4EA30532B851892000B562E /* Utils */,
 				D4C173A12B7E31690070F560 /* AppDelegate.swift */,
 				D4C173AA2B7E316A0070F560 /* Assets.xcassets */,
 				D4C173AC2B7E316A0070F560 /* LaunchScreen.storyboard */,
@@ -215,6 +218,14 @@
 				D4EA30512B84DBE3000B562E /* UIImageView.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D4EA30532B851892000B562E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D4EA30542B8518A1000B562E /* Utils.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -364,6 +375,7 @@
 				D4EA30522B84DBE3000B562E /* UIImageView.swift in Sources */,
 				D4D580AD2B7E334B006A5F2B /* HomeModels.swift in Sources */,
 				D4455E2E2B80DC890015EFC1 /* APIClientError.swift in Sources */,
+				D4EA30552B8518A1000B562E /* Utils.swift in Sources */,
 				D4D580BA2B7E3359006A5F2B /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -55,8 +55,6 @@ final class ResultCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .white
-        selectionStyle = .none
         setupView()
         setupConstraints()
     }
@@ -73,6 +71,8 @@ final class ResultCell: UITableViewCell {
     // MARK: Setup methods
     
     func setupView() {
+        backgroundColor = .white
+        selectionStyle = .none
         [imgView, titleTextLabel, authorTextLabel, likesTextLabel].forEach { contentView.addSubview($0) }
     }
     
@@ -102,8 +102,8 @@ final class ResultCell: UITableViewCell {
     
     func setup(result: SearchResult){
         titleTextLabel.text = result.alt_description?.capitalizeSentence
-        authorTextLabel.text = "By \(result.user.name)"
+        authorTextLabel.text = "By \(result.userName)".capitalized
         likesTextLabel.text = "\(result.likes) likes"
-        imgView.loadImageFromUrl(urlString: result.urls.thumb)
+        imgView.loadImageFromUrl(urlString: result.imgeUrl)
     }
 }

@@ -74,15 +74,10 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
         setupView()
         setupConstraints()
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-    }
     
     // MARK: Setup methods
 
-    func setupView() {
+    private func setupView() {
         title = "Main"
         view.backgroundColor = .white
         

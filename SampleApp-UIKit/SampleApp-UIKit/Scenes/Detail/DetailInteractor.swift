@@ -8,29 +8,27 @@
 import UIKit
 
 protocol DetailBusinessLogic {
-    func doSomething(request: Detail.Something.Request)
+    func fetch()
 }
 
 protocol DetailDataStore {
     var photoId: String { get set }
 }
 
-class DetailInteractor: DetailBusinessLogic, DetailDataStore
-{
+class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var photoId: String = ""
+    var presenter: DetailPresentationLogic?
+    var worker: DetailWorker?
     
-  var presenter: DetailPresentationLogic?
-  var worker: DetailWorker?
-  //var name: String = ""
-  
-  // MARK: Do something
-  
-  func doSomething(request: Detail.Something.Request)
-  {
-    worker = DetailWorker()
-    worker?.doSomeWork()
-    
-    let response = Detail.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
+    func fetch() {
+        worker = DetailWorker()
+        worker?.fetch(request: Detail.Fetch.Request(photoId: photoId, data: .get), completion: { result in
+            switch result {
+            case .success(let response):
+                self.presenter?.present(response: response)
+            case .failure(let error):
+                self.presenter?.present(error: error)
+            }
+        })
+    }
 }

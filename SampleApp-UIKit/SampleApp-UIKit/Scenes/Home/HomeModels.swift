@@ -17,7 +17,7 @@ enum Home {
         struct Response: Decodable {
             let total: Int
             let total_pages: Int
-            let results: [SearchResult]
+            let results: [ResponseResult]
         }
         
         struct ViewModel {
@@ -27,42 +27,26 @@ enum Home {
     }
 }
 
+struct ResponseResult: Decodable {
+    let id: String
+    let alt_description: String?
+    let likes: Int
+    let urls: HomeUrls
+    let user: HomeUser
+}
+
 struct SearchResult: Decodable {
     let id: String
     let alt_description: String?
     let likes: Int
-    let urls: Urls
-    let user: User
-
+    let imgeUrl: String
+    let userName: String
 }
 
-struct Urls: Decodable {
+struct HomeUrls: Decodable {
     let thumb: String
 }
 
-struct User: Decodable {
-    let id: String
-    let username: String
+struct HomeUser: Decodable {
     let name: String
-}
-
-enum RequestData {
-    case search
-    case get
-    
-    func path() -> String {
-        switch self {
-        case .search:
-            return "/search/photos"
-        case .get:
-            return "/photos/:id"
-        }
-    }
-    
-    func method() -> String {
-        switch self {
-        case .search, .get:
-            return "GET"
-        }
-    }
 }

@@ -16,8 +16,17 @@ final class HomePresenter: HomePresentationLogic {
     weak var viewController: HomeDisplayLogic?
   
     func present(response: Home.Fetch.Response) {
-        let viewModel = Home.Fetch.ViewModel(results: response.results, error: nil)
-        viewController?.display(totalResults: response.total, totalPages: response.total_pages, viewModel: viewModel)
+        var searchResults: [SearchResult] = []
+        
+        for result in response.results {
+            searchResults.append(SearchResult(id: result.id,
+                                              alt_description: result.alt_description,
+                                              likes: result.likes,
+                                              imgeUrl: result.urls.thumb,
+                                              userName: result.user.name))
+        }
+        
+        viewController?.display(totalResults: response.total, totalPages: response.total_pages, viewModel: Home.Fetch.ViewModel(results: searchResults, error: nil))
     }
     
     func present(error: Error) {
