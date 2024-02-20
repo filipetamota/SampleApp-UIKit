@@ -27,6 +27,9 @@
 		D4D580B92B7E3359006A5F2B /* DetailModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D580B32B7E3359006A5F2B /* DetailModels.swift */; };
 		D4D580BA2B7E3359006A5F2B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D580B42B7E3359006A5F2B /* DetailViewController.swift */; };
 		D4D580BB2B7E3359006A5F2B /* DetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D580B52B7E3359006A5F2B /* DetailInteractor.swift */; };
+		D4EA30482B84BDA3000B562E /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30472B84BDA3000B562E /* ResultCell.swift */; };
+		D4EA30502B84DBD0000B562E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA304F2B84DBD0000B562E /* String.swift */; };
+		D4EA30522B84DBE3000B562E /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30512B84DBE3000B562E /* UIImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,9 @@
 		D4D580B32B7E3359006A5F2B /* DetailModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModels.swift; sourceTree = "<group>"; };
 		D4D580B42B7E3359006A5F2B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		D4D580B52B7E3359006A5F2B /* DetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInteractor.swift; sourceTree = "<group>"; };
+		D4EA30472B84BDA3000B562E /* ResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
+		D4EA304F2B84DBD0000B562E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		D4EA30512B84DBE3000B562E /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +130,7 @@
 				D4D580BF2B7EBAB4006A5F2B /* APIClient */,
 				D4D580BE2B7EBAAD006A5F2B /* Cells */,
 				D4D580A12B7E3306006A5F2B /* Scenes */,
+				D4EA304E2B84DB66000B562E /* Extensions */,
 				D4C173A12B7E31690070F560 /* AppDelegate.swift */,
 				D4C173AA2B7E316A0070F560 /* Assets.xcassets */,
 				D4C173AC2B7E316A0070F560 /* LaunchScreen.storyboard */,
@@ -187,6 +194,7 @@
 		D4D580BE2B7EBAAD006A5F2B /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				D4EA30472B84BDA3000B562E /* ResultCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -198,6 +206,15 @@
 				D4455E2D2B80DC890015EFC1 /* APIClientError.swift */,
 			);
 			path = APIClient;
+			sourceTree = "<group>";
+		};
+		D4EA304E2B84DB66000B562E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D4EA304F2B84DBD0000B562E /* String.swift */,
+				D4EA30512B84DBE3000B562E /* UIImageView.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,6 +347,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4EA30502B84DBD0000B562E /* String.swift in Sources */,
 				D4D580AC2B7E334B006A5F2B /* HomeRouter.swift in Sources */,
 				D485BE302B80C463003C2A3A /* APIClient.swift in Sources */,
 				D4D580B72B7E3359006A5F2B /* DetailWorker.swift in Sources */,
@@ -340,8 +358,10 @@
 				D4D580AB2B7E334B006A5F2B /* HomeWorker.swift in Sources */,
 				D4D580AF2B7E334B006A5F2B /* HomeInteractor.swift in Sources */,
 				D4D580B82B7E3359006A5F2B /* DetailRouter.swift in Sources */,
+				D4EA30482B84BDA3000B562E /* ResultCell.swift in Sources */,
 				D4D580B92B7E3359006A5F2B /* DetailModels.swift in Sources */,
 				D4D580AA2B7E334B006A5F2B /* HomePresenter.swift in Sources */,
+				D4EA30522B84DBE3000B562E /* UIImageView.swift in Sources */,
 				D4D580AD2B7E334B006A5F2B /* HomeModels.swift in Sources */,
 				D4455E2E2B80DC890015EFC1 /* APIClientError.swift in Sources */,
 				D4D580BA2B7E3359006A5F2B /* DetailViewController.swift in Sources */,

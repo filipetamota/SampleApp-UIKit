@@ -3,7 +3,6 @@
 //  SampleApp-UIKit
 //
 //  Created by Filipe Mota on 15/2/24.
-//  Copyright (c) 2024. All rights reserved.
 //
 
 import UIKit
@@ -26,7 +25,7 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
         
         worker = HomeWorker()
         
-        worker?.doSomeWork(request: Request(query: query, path: "/search/photos", method: "GET"), completion: { result in
+        worker?.fetch(request: Request(query: query, path: "/search/photos", method: "GET"), completion: { result in
             switch result {
             case .success(let response):
                 self.presenter?.present(response: response)

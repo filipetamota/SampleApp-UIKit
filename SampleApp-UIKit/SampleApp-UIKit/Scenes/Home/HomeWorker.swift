@@ -3,13 +3,12 @@
 //  SampleApp-UIKit
 //
 //  Created by Filipe Mota on 15/2/24.
-//  Copyright (c) 2024. All rights reserved.
 //
 
 import UIKit
 
 class HomeWorker {
-    func doSomeWork(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, Error>) -> Void) {
+    func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, Error>) -> Void) {
         guard let urlRequest = buildURLRequest(request: request) else {
             completion(.failure(APIClientError.requestError))
             return
@@ -48,7 +47,7 @@ class HomeWorker {
         var urlRequest = URLRequest(url: url)
         urlRequest.url = components?.url
         urlRequest.httpMethod = request.method
-        urlRequest.addValue(accessKey, forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Client-ID \(accessKey)", forHTTPHeaderField: "Authorization")
 
         return urlRequest
     }

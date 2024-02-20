@@ -3,7 +3,6 @@
 //  SampleApp-UIKit
 //
 //  Created by Filipe Mota on 15/2/24.
-//  Copyright (c) 2024. All rights reserved.
 //
 
 import UIKit
@@ -17,11 +16,12 @@ class HomePresenter: HomePresentationLogic {
     weak var viewController: HomeDisplayLogic?
   
     func present(response: Home.Fetch.Response) {
-        let viewModel = Home.Fetch.ViewModel()
-        viewController?.display(viewModel: viewModel)
+        let viewModel = Home.Fetch.ViewModel(results: response.results, error: nil)
+        viewController?.display(totalResults: response.total, totalPages: response.total_pages, viewModel: viewModel)
     }
     
     func present(error: Error) {
-        
+        let viewModel = Home.Fetch.ViewModel(results: nil, error: error)
+        viewController?.display(totalResults: 0, totalPages: 0, viewModel: viewModel)
     }
 }

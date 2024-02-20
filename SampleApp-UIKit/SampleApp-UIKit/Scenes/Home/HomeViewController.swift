@@ -3,19 +3,28 @@
 //  SampleApp-UIKit
 //
 //  Created by Filipe Mota on 15/2/24.
-//  Copyright (c) 2024. All rights reserved.
 //
 
 
 import UIKit
 
 protocol HomeDisplayLogic: AnyObject {
-  func display(viewModel: Home.Fetch.ViewModel)
+    func display(totalResults: Int, totalPages: Int, viewModel: Home.Fetch.ViewModel)
 }
 
 final class HomeViewController: UIViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
+    
+    static let cache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.name = "List Images Cache"
+        return cache
+    } ()
+    
+    fileprivate var totalResults: Int?
+    fileprivate var totalPages: Int?
+    fileprivate var tableContent: Home.Fetch.ViewModel?
     
     // MARK: UI
     
@@ -25,6 +34,11 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
 
          return tableView
      }()
+    
+    private lazy var searchBarController: UISearchController = {
+        let searchBarController = UISearchController(searchResultsController: nil)
+        return searchBarController
+    }()
 
     // MARK: Object lifecycle
   
@@ -70,11 +84,18 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
 
     func setupView() {
         title = "Main"
-        view.backgroundColor = .gray
+        view.backgroundColor = .white
+        
+        searchBarController.searchBar.delegate = self
+        searchBarController.obscuresBackgroundDuringPresentation = false
+        searchBarController.searchBar.sizeToFit()
+        navigationItem.searchController = searchBarController
+        
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.register(ResultCell.self, forCellReuseIdentifier: ResultCell.identifier)
         
         view.addSubview(tableView)
     }
@@ -88,28 +109,55 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
         ])
     }
   
-  
-  // MARK: Do something
-  
-  
+    // MARK: Fetch and display methods
+    
     func fetch(query: String) {
         interactor?.fetch(query: query)
     }
+    
+    func display(totalResults: Int, totalPages: Int, viewModel: Home.Fetch.ViewModel) {
+        self.totalResults = totalResults
+        self.totalPages = totalPages
+        self.tableContent = viewModel
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
   
-  func display(viewModel: Home.Fetch.ViewModel) {
-      
-  }
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        guard let query = searchBar.text else { return }
+        fetch(query: query)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        searchBar.text = String()
+    }
 }
 
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return self.tableContent?.results?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = "Row \(indexPath.row)"
+        guard 
+            let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.identifier, for: indexPath) as? ResultCell,
+            let result = self.tableContent?.results?[indexPath.row]
+        else {
+            assertionFailure("should not enter here")
+            return UITableViewCell()
+        }
+        cell.setup(result: result)
+//        var content = cell.defaultContentConfiguration()
+//        content.text = "Row \(indexPath.row)"
+//        content.secondaryText = self.tableContent?.results?[indexPath.row].alt_description
+//        cell.contentConfiguration = content
         return cell
     }
     
