@@ -17,6 +17,8 @@ enum Detail {
         
         struct Response: Decodable {
             let id: String
+            let width: Int
+            let height: Int
             let alt_description: String?
             let description: String?
             let likes: Int
@@ -35,11 +37,13 @@ enum Detail {
 
 struct DetailResult: Decodable {
     let id: String
+    let width: Int
+    let height: Int
     let alt_description: String?
     let description: String?
     let likes: Int
     let imgUrl: String
-    let userName: String?
+    let userName: String
     let equipment: String?
     let location: String?
 }
@@ -55,7 +59,7 @@ struct DetailUser: Decodable {
 }
 
 struct Equipment: Decodable {
-    let name: String?
+    let model: String?
 }
 
 struct Location: Decodable {

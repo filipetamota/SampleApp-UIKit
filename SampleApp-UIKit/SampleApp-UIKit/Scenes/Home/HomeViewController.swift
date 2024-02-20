@@ -77,8 +77,8 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
     
     // MARK: Setup methods
 
-    private func setupView() {
-        title = "Main"
+    func setupView() {
+        title = "Search"
         view.backgroundColor = .white
         
         searchBarController.searchBar.delegate = self
@@ -89,7 +89,6 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .singleLine
-        tableView.contentInsetAdjustmentBehavior = .never
         tableView.register(ResultCell.self, forCellReuseIdentifier: ResultCell.identifier)
         
         view.addSubview(tableView)
@@ -138,6 +137,10 @@ extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.tableContent?.results?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 112
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

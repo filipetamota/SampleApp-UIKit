@@ -17,6 +17,20 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     
     // MARK: UI
     
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var scrollViewContainer: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var imgView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -28,7 +42,7 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     private lazy var titleTextLabel: UILabel = {
         let titleTextLabel = UILabel()
         titleTextLabel.numberOfLines = 0
-        titleTextLabel.font = UIFont.systemFont(ofSize: 16)
+        titleTextLabel.font = UIFont.boldSystemFont(ofSize: 16)
         titleTextLabel.translatesAutoresizingMaskIntoConstraints = false
         return titleTextLabel
     }()
@@ -36,17 +50,18 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     private lazy var subtitleTextLabel: UILabel = {
         let subtitleTextLabel = UILabel()
         subtitleTextLabel.numberOfLines = 0
-        subtitleTextLabel.font = UIFont.systemFont(ofSize: 14)
+        subtitleTextLabel.font = UIFont.systemFont(ofSize: 15)
         subtitleTextLabel.translatesAutoresizingMaskIntoConstraints = false
         return subtitleTextLabel
     }()
     
-    private lazy var authorTextLabel: UILabel = {
-        let authorTextLabel = UILabel()
-        authorTextLabel.font = UIFont.systemFont(ofSize: 14)
-        authorTextLabel.textColor = .gray
-        authorTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        return authorTextLabel
+    private lazy var infoTextLabel: UILabel = {
+        let infoTextLabel = UILabel()
+        infoTextLabel.numberOfLines = 0
+        infoTextLabel.font = UIFont.systemFont(ofSize: 15)
+        infoTextLabel.textColor = .gray
+        infoTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        return infoTextLabel
     }()
     
     private lazy var likesTextLabel: UILabel = {
@@ -91,24 +106,42 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupConstraints()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         fetch()
     }
     
     // MARK: Setup methods
     
     private func setupView() {
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         title = "Detail"
         
-        [imgView, titleTextLabel, subtitleTextLabel, authorTextLabel, likesTextLabel].forEach { view.addSubview($0) }
+        view.addSubview(scrollView)
+        scrollView.addSubview(scrollViewContainer)
+        scrollViewContainer.addArrangedSubview(imgView)
+
+        [imgView, titleTextLabel, subtitleTextLabel, infoTextLabel, likesTextLabel].forEach { scrollViewContainer.addArrangedSubview($0) }
     }
     
-    private func setupConstraints() {
+    private var heightConstraint: NSLayoutConstraint!
+    
+    
+    private func setupConstraints(multiplier: CGFloat) {
+        NSLayoutConstraint.activate([
+            scrollView.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
+            
+            scrollViewContainer.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+            scrollViewContainer.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+            scrollViewContainer.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            scrollViewContainer.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            
+            scrollViewContainer.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            imgView.heightAnchor.constraint(equalTo: imgView.widthAnchor, multiplier: multiplier)
+            
+        ])
     }
     
     // MARK: Fetch and display methods
@@ -118,6 +151,26 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     }
     
     func display(viewModel: Detail.Fetch.ViewModel) {
-        //nameTextField.text = viewModel.name
+        guard let result = viewModel.result else {
+            assertionFailure("something went wrong")
+            return
+        }
+        let aspectRatio = Double(result.height) / Double(result.width)
+        DispatchQueue.main.async {
+            self.titleTextLabel.text = result.alt_description?.capitalizeSentence
+            self.subtitleTextLabel.text = result.description
+            self.infoTextLabel.text = "Taken by \(result.userName)"
+            if let location = result.location {
+                self.infoTextLabel.text?.append(" in \(location)")
+            }
+            if let equipment = result.equipment {
+                self.infoTextLabel.text?.append(" with \(equipment).")
+            }
+            self.likesTextLabel.text = "\(result.likes) likes"
+            self.setupConstraints(multiplier: aspectRatio)
+            self.imgView.loadImageFromUrl(urlString: viewModel.result?.imgUrl ?? "")
+            self.view.layoutIfNeeded()
+        }
+        
     }
 }

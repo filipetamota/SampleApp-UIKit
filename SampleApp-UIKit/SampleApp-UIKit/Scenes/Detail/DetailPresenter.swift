@@ -17,12 +17,14 @@ final class DetailPresenter: DetailPresentationLogic {
   
     func present(response: Detail.Fetch.Response) {
         let viewModel = Detail.Fetch.ViewModel(result: DetailResult(id: response.id, 
+                                                                    width: response.width,
+                                                                    height: response.height,
                                                                     alt_description: response.alt_description,
                                                                     description: response.description,
                                                                     likes: response.likes,
                                                                     imgUrl: response.urls.regular,
                                                                     userName: response.user.name,
-                                                                    equipment: response.exif?.name,
+                                                                    equipment: response.exif?.model,
                                                                     location: response.location?.name),
                                                error: nil)
         viewController?.display(viewModel: viewModel)

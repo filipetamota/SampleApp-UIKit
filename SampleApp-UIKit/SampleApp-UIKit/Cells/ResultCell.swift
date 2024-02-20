@@ -16,7 +16,8 @@ final class ResultCell: UITableViewCell {
     
     private lazy var imgView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "placeholder")
         return imageView
@@ -75,27 +76,27 @@ final class ResultCell: UITableViewCell {
         selectionStyle = .none
         [imgView, titleTextLabel, authorTextLabel, likesTextLabel].forEach { contentView.addSubview($0) }
     }
-    
+    // TODO: set up constraint variable
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            imgView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            imgView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             imgView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            imgView.bottomAnchor.constraint(greaterThanOrEqualTo: contentView.bottomAnchor, constant: -20),
-            imgView.widthAnchor.constraint(equalToConstant: 50),
-            imgView.heightAnchor.constraint(lessThanOrEqualToConstant: 80),
+            imgView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            imgView.widthAnchor.constraint(equalToConstant: 80),
+            imgView.heightAnchor.constraint(equalToConstant: 80),
             
             titleTextLabel.leftAnchor.constraint(equalTo: imgView.rightAnchor, constant: 20),
-            titleTextLabel.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
-            titleTextLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            titleTextLabel.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -16),
+            titleTextLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             
             authorTextLabel.leftAnchor.constraint(equalTo: imgView.rightAnchor, constant: 20),
-            authorTextLabel.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
+            authorTextLabel.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -16),
             authorTextLabel.topAnchor.constraint(greaterThanOrEqualTo: titleTextLabel.bottomAnchor, constant: 20),
-            authorTextLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            authorTextLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
-            likesTextLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            likesTextLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
             likesTextLabel.topAnchor.constraint(greaterThanOrEqualTo: titleTextLabel.bottomAnchor, constant: 20),
-            likesTextLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            likesTextLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
         ])
     }
