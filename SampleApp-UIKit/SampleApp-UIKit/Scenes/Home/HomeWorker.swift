@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeWorker {
+final class HomeWorker {
     func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, Error>) -> Void) {
         guard let urlRequest = buildURLRequest(request: request) else {
             completion(.failure(APIClientError.requestError))
@@ -24,8 +24,8 @@ class HomeWorker {
         }
     }
     
-    func buildURLRequest(request: Home.Fetch.Request) -> URLRequest? {
-        guard 
+    private func buildURLRequest(request: Home.Fetch.Request) -> URLRequest? {
+        guard
             let domain = Bundle.main.object(forInfoDictionaryKey: "Domain") as? String,
             let accessKey = Bundle.main.object(forInfoDictionaryKey: "AccessKey") as? String,
             let baseURL = URL(string: domain)
@@ -33,10 +33,10 @@ class HomeWorker {
             assertionFailure()
             return nil
         }
-        let url = baseURL.appendingPathComponent(request.path)
+        let url = baseURL.appendingPathComponent(request.data.path())
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
         
-        switch request.method {
+        switch request.data.method() {
             case "GET":
                 components?.queryItems = [URLQueryItem(name: "query", value: request.query)]
             default:
@@ -46,7 +46,7 @@ class HomeWorker {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.url = components?.url
-        urlRequest.httpMethod = request.method
+        urlRequest.httpMethod = request.data.method()
         urlRequest.addValue("Client-ID \(accessKey)", forHTTPHeaderField: "Authorization")
 
         return urlRequest

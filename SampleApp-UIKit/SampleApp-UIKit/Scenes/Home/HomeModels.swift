@@ -11,8 +11,7 @@ enum Home {
     enum Fetch {
         struct Request {
             let query: String
-            let path: String
-            let method: String
+            let data: RequestData
         }
         
         struct Response: Decodable {
@@ -45,4 +44,25 @@ struct User: Decodable {
     let id: String
     let username: String
     let name: String
+}
+
+enum RequestData {
+    case search
+    case get
+    
+    func path() -> String {
+        switch self {
+        case .search:
+            return "/search/photos"
+        case .get:
+            return "/photos/:id"
+        }
+    }
+    
+    func method() -> String {
+        switch self {
+        case .search, .get:
+            return "GET"
+        }
+    }
 }

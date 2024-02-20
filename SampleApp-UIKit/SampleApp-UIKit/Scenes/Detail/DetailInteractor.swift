@@ -7,18 +7,18 @@
 
 import UIKit
 
-protocol DetailBusinessLogic
-{
-  func doSomething(request: Detail.Something.Request)
+protocol DetailBusinessLogic {
+    func doSomething(request: Detail.Something.Request)
 }
 
-protocol DetailDataStore
-{
-  //var name: String { get set }
+protocol DetailDataStore {
+    var photoId: String { get set }
 }
 
 class DetailInteractor: DetailBusinessLogic, DetailDataStore
 {
+    var photoId: String = ""
+    
   var presenter: DetailPresentationLogic?
   var worker: DetailWorker?
   //var name: String = ""

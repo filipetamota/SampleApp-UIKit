@@ -154,10 +154,6 @@ extension HomeViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.setup(result: result)
-//        var content = cell.defaultContentConfiguration()
-//        content.text = "Row \(indexPath.row)"
-//        content.secondaryText = self.tableContent?.results?[indexPath.row].alt_description
-//        cell.contentConfiguration = content
         return cell
     }
     
@@ -166,7 +162,14 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let router = router else { return }
-        router.navigateToDetail()
+        guard 
+            let router = router,
+            var dataStore = router.dataStore,
+            let photoId = self.tableContent?.results?[indexPath.row].id
+        else {
+            return
+        }
+        dataStore.photoId = photoId
+        router.routeToDetail(source: self)
     }
 }

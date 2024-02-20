@@ -7,50 +7,53 @@
 
 import UIKit
 
-@objc protocol HomeRoutingLogic
-{
-  func navigateToDetail()
+protocol HomeRoutingLogic {
+    func routeToDetail(source: HomeViewController)
 }
 
-protocol HomeDataPassing
-{
-  var dataStore: HomeDataStore? { get }
+protocol HomeDataPassing {
+    var dataStore: HomeDataStore? { get }
 }
 
-class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing
-{
-  weak var viewController: HomeViewController?
-  var dataStore: HomeDataStore?
-  
-  // MARK: Routing
-  
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
+final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
+    weak var viewController: HomeViewController?
+    var dataStore: HomeDataStore?
+    
+    // MARK: Routing
+    
+    func routeToDetail(source: HomeViewController) {
+        let destinationVC = DetailViewController()
+        guard var destinationDS = destinationVC.router?.dataStore else { return }
+        passDataToDetail(source: dataStore!, destination: &destinationDS)
+        navigateToDetail(source: source, destination: destinationVC)
+    }
+    
+    // MARK: Navigation
+    
+    func navigateToDetail(source: HomeViewController, destination: DetailViewController) {
+        source.navigationController?.pushViewController(destination, animated: true)
+    }
+    
+    // MARK: Passing data
+    
+    func passDataToDetail(source: HomeDataStore, destination: inout DetailDataStore) {
+        destination.photoId = source.photoId
+    }
+    
+    //func routeToSomewhere(segue: UIStoryboardSegue?)
+    //{
+    //  if let segue = segue {
+    //    let destinationVC = segue.destination as! SomewhereViewController
+    //    var destinationDS = destinationVC.router!.dataStore!
+    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
+    //  } else {
+    //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
+    //    var destinationDS = destinationVC.router!.dataStore!
+    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
+    //    navigateToSomewhere(source: viewController!, destination: destinationVC)
+    //  }
+    //}
+    
 
-  // MARK: Navigation
-  
-  func navigateToDetail()
-  {
-      let destinationVC = DetailViewController()
-      viewController?.navigationController?.pushViewController(destinationVC, animated: true)
-  }
-  
-  // MARK: Passing data
-  
-  //func passDataToSomewhere(source: HomeDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
 }
