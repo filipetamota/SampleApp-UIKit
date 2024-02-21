@@ -44,10 +44,10 @@ class APIClient {
     
     func validate(data: Data, response: URLResponse) throws {
         guard let code = (response as? HTTPURLResponse)?.statusCode else {
-            throw APIClientError.connectionError(data)
+            throw SampleAppError.connectionError(data)
         }
         guard (200..<300).contains(code) else {
-            throw APIClientError.apiError
+            throw SampleAppError.apiError
         }
     }
 }

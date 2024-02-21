@@ -11,7 +11,7 @@ final class HomeWorker {
     func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, Error>) -> Void) {
         
         guard let urlRequest = Utils.buildURLRequest(requestData: request.data, queryParams: [URLQueryItem(name: "query", value: request.query)]) else {
-            completion(.failure(APIClientError.requestError))
+            completion(.failure(SampleAppError.requestError))
             return
         }
         let apiClient = APIClient()

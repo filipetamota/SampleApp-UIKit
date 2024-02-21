@@ -43,6 +43,7 @@ struct DetailResult: Decodable {
     let description: String?
     let likes: Int
     let imgUrl: String
+    let thumbUrl: String
     let userName: String
     let equipment: String?
     let location: String?
@@ -50,6 +51,7 @@ struct DetailResult: Decodable {
 
 struct DetailUrls: Decodable {
     let regular: String
+    let thumb: String
 }
 
 struct DetailUser: Decodable {

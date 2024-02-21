@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
 final class DetailWorker {
     
     func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, Error>) -> Void) {
         
         guard let urlRequest = Utils.buildURLRequest(requestData: request.data, pathVariable: request.photoId) else {
-            completion(.failure(APIClientError.requestError))
+            completion(.failure(SampleAppError.requestError))
             return
         }
         let apiClient = APIClient()
@@ -22,7 +23,7 @@ final class DetailWorker {
                 let response = try JSONDecoder().decode(Detail.Fetch.Response.self, from: dataResponse)
                 completion(.success(response))
             } catch {
-                completion(.failure(error))
+                completion(.failure(SampleAppError.parsingError))
             }
         }
     }

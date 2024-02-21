@@ -22,7 +22,7 @@ final class HomePresenter: HomePresentationLogic {
             searchResults.append(SearchResult(id: result.id,
                                               alt_description: result.alt_description,
                                               likes: result.likes,
-                                              imgeUrl: result.urls.thumb,
+                                              thumbUrl: result.urls.thumb,
                                               userName: result.user.name))
         }
         

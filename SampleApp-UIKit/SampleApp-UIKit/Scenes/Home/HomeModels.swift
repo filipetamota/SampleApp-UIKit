@@ -39,7 +39,7 @@ struct SearchResult: Decodable {
     let id: String
     let alt_description: String?
     let likes: Int
-    let imgeUrl: String
+    let thumbUrl: String
     let userName: String
 }
 

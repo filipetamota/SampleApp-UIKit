@@ -9,6 +9,7 @@ import UIKit
 
 protocol HomeRoutingLogic {
     func routeToDetail(source: HomeViewController)
+    func routeToFavorites(source: HomeViewController)
 }
 
 protocol HomeDataPassing {
@@ -28,9 +29,18 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
         navigateToDetail(source: source, destination: destinationVC)
     }
     
+    func routeToFavorites(source: HomeViewController) {
+        let destinationVC = FavoritesViewController()
+        navigateToFavorites(source: source, destination: destinationVC)
+    }
+    
     // MARK: Navigation
     
     func navigateToDetail(source: HomeViewController, destination: DetailViewController) {
+        source.navigationController?.pushViewController(destination, animated: true)
+    }
+    
+    func navigateToFavorites(source: HomeViewController, destination: FavoritesViewController) {
         source.navigationController?.pushViewController(destination, animated: true)
     }
     
@@ -39,21 +49,4 @@ final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
     func passDataToDetail(source: HomeDataStore, destination: inout DetailDataStore) {
         destination.photoId = source.photoId
     }
-    
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
-    //{
-    //  if let segue = segue {
-    //    let destinationVC = segue.destination as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //  } else {
-    //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-    //  }
-    //}
-    
-
 }

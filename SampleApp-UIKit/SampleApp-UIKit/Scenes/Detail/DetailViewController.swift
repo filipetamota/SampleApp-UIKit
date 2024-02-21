@@ -14,6 +14,7 @@ protocol DetailDisplayLogic: AnyObject {
 final class DetailViewController: UIViewController, DetailDisplayLogic {
     var interactor: DetailBusinessLogic?
     var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
+    private var currentResult: DetailResult?
     
     // MARK: UI
     
@@ -35,7 +36,7 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "placeholder")
+        imageView.image = UIImage(named: "img_placeholder")
         return imageView
      }()
     
@@ -71,8 +72,6 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
         likesTextLabel.translatesAutoresizingMaskIntoConstraints = false
         return likesTextLabel
     }()
-    
-    
     
     // MARK: Object lifecycle
     
@@ -113,13 +112,29 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     
     private func setupView() {
         view.backgroundColor = .white
-        title = "Detail"
+        title = NSLocalizedString("detail_title", comment: "")
+        setupBarButton()
         
         view.addSubview(scrollView)
         scrollView.addSubview(scrollViewContainer)
         scrollViewContainer.addArrangedSubview(imgView)
 
         [imgView, titleTextLabel, subtitleTextLabel, infoTextLabel, likesTextLabel].forEach { scrollViewContainer.addArrangedSubview($0) }
+    }
+    
+    private func setupBarButton(photoId: String? = nil) {
+        var image = UIImage(named: "btn_add_favorite")
+        if
+            let photoId = photoId,
+            let interactor = interactor,
+            interactor.isFavorite(photoId: photoId)
+        {
+            image = UIImage(named: "btn_delete_favorite")
+        }
+        
+        let barButton = UIBarButtonItem(image: image, style: .plain, target: self, action:  #selector(addRemoveFavorite))
+        barButton.tintColor = .black
+        navigationItem.rightBarButtonItem = barButton
     }
     
     private var heightConstraint: NSLayoutConstraint!
@@ -129,7 +144,7 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
         NSLayoutConstraint.activate([
             scrollView.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
             scrollView.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 20),
             scrollView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             
             scrollViewContainer.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
@@ -146,7 +161,7 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     
     // MARK: Fetch and display methods
     
-    func fetch() {
+    private func fetch() {
         interactor?.fetch()
     }
     
@@ -155,22 +170,33 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
             assertionFailure("something went wrong")
             return
         }
+        currentResult = result
         let aspectRatio = Double(result.height) / Double(result.width)
         DispatchQueue.main.async {
             self.titleTextLabel.text = result.alt_description?.capitalizeSentence
             self.subtitleTextLabel.text = result.description
-            self.infoTextLabel.text = "Taken by \(result.userName)"
+            self.infoTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("taken_by", comment: ""), result.userName)
             if let location = result.location {
-                self.infoTextLabel.text?.append(" in \(location)")
+                self.infoTextLabel.text?.append(String.localizedStringWithFormat(NSLocalizedString("taken_in", comment: ""), location))
             }
             if let equipment = result.equipment {
-                self.infoTextLabel.text?.append(" with \(equipment).")
+                self.infoTextLabel.text?.append(String.localizedStringWithFormat(NSLocalizedString("taken_with", comment: ""), equipment))
             }
-            self.likesTextLabel.text = "\(result.likes) likes"
+            self.infoTextLabel.text?.append(".")
+            self.likesTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("number_of_likes", comment: ""), result.likes)
             self.setupConstraints(multiplier: aspectRatio)
-            self.imgView.loadImageFromUrl(urlString: viewModel.result?.imgUrl ?? "")
+            self.imgView.loadImageFromUrl(urlString: result.imgUrl)
+            self.setupBarButton(photoId: result.id)
             self.view.layoutIfNeeded()
         }
         
+    }
+    
+    @objc private func addRemoveFavorite() {
+        guard let result = currentResult, let interactor = interactor else { return }
+        interactor.addRemoveFavorite(favorite: result) { result in
+            self.presentFavoriteAlert(result: result)
+        }
+        self.setupBarButton(photoId: result.id)
     }
 }

@@ -19,7 +19,7 @@ final class ResultCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "placeholder")
+        imageView.image = UIImage(named: "img_placeholder")
         return imageView
      }()
     
@@ -105,6 +105,6 @@ final class ResultCell: UITableViewCell {
         titleTextLabel.text = result.alt_description?.capitalizeSentence
         authorTextLabel.text = "By \(result.userName)".capitalized
         likesTextLabel.text = "\(result.likes) likes"
-        imgView.loadImageFromUrl(urlString: result.imgeUrl)
+        imgView.loadImageFromUrl(urlString: result.thumbUrl)
     }
 }

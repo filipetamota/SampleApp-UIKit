@@ -1,20 +1,19 @@
 //
-//  HomeViewController.swift
+//  FavoritesViewController.swift
 //  SampleApp-UIKit
 //
-//  Created by Filipe Mota on 15/2/24.
+//  Created by Filipe Mota on 21/2/24.
 //
-
 
 import UIKit
 
-protocol HomeDisplayLogic: AnyObject {
-    func display(totalResults: Int, totalPages: Int, viewModel: Home.Fetch.ViewModel)
+protocol FavoritesDisplayLogic: AnyObject {
+    func display(viewModel: Favorites.Fetch.ViewModel)
 }
 
-final class HomeViewController: UIViewController, HomeDisplayLogic {
-    var interactor: HomeBusinessLogic?
-    var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
+final class FavoritesViewController: UIViewController, FavoritesDisplayLogic {
+    var interactor: FavoritesBusinessLogic?
+    var router: (NSObjectProtocol & FavoritesRoutingLogic)?
     
     static let cache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
@@ -24,7 +23,7 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
     
     fileprivate var totalResults: Int?
     fileprivate var totalPages: Int?
-    fileprivate var tableContent: Home.Fetch.ViewModel?
+    fileprivate var tableContent: Favorites.Fetch.ViewModel?
     
     // MARK: UI
     
@@ -34,11 +33,6 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
 
          return tableView
      }()
-    
-    private lazy var searchBarController: UISearchController = {
-        let searchBarController = UISearchController(searchResultsController: nil)
-        return searchBarController
-    }()
 
     // MARK: Object lifecycle
   
@@ -56,15 +50,14 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
   
     private func setup() {
         let viewController = self
-        let interactor = HomeInteractor()
-        let presenter = HomePresenter()
-        let router = HomeRouter()
+        let interactor = FavoritesInteractor()
+        let presenter = FavoritesPresenter()
+        let router = FavoritesRouter()
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
         presenter.viewController = viewController
         router.viewController = viewController
-        router.dataStore = interactor
     }
     
     // MARK: View lifecycle
@@ -73,21 +66,14 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        fetch()
     }
     
     // MARK: Setup methods
 
     private func setupView() {
-        title = NSLocalizedString("search_title", comment: "")
+        title = NSLocalizedString("favorites_title", comment: "")
         view.backgroundColor = .white
-        let barButton = UIBarButtonItem(image: UIImage(named: "btn_show_favorites"), style: .plain, target: self, action: #selector(openFavorites))
-        barButton.tintColor = .black
-        navigationItem.rightBarButtonItem = barButton
-        
-        searchBarController.searchBar.delegate = self
-        searchBarController.obscuresBackgroundDuringPresentation = false
-        searchBarController.searchBar.sizeToFit()
-        navigationItem.searchController = searchBarController
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -95,11 +81,6 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
         tableView.register(ResultCell.self, forCellReuseIdentifier: ResultCell.identifier)
         
         view.addSubview(tableView)
-    }
-    
-    @objc private func openFavorites() {
-        guard let router = router else { return }
-        router.routeToFavorites(source: self)
     }
     
     private func setupConstraints() {
@@ -113,13 +94,11 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
   
     // MARK: Fetch and display methods
     
-    private func fetch(query: String) {
-        interactor?.fetch(query: query)
+    func fetch() {
+        interactor?.fetch()
     }
     
-    func display(totalResults: Int, totalPages: Int, viewModel: Home.Fetch.ViewModel) {
-        self.totalResults = totalResults
-        self.totalPages = totalPages
+    func display(viewModel: Favorites.Fetch.ViewModel) {
         self.tableContent = viewModel
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -128,19 +107,7 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
   
 }
 
-extension HomeViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-        guard let query = searchBar.text else { return }
-        fetch(query: query)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-    }
-}
-
-extension HomeViewController: UITableViewDataSource {
+extension FavoritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.tableContent?.results?.count ?? 0
@@ -151,9 +118,9 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard 
+        guard
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.identifier, for: indexPath) as? ResultCell,
-            let result = self.tableContent?.results?[indexPath.row]
+            let result = self.tableContent?.results?[indexPath.row].toSearchResult()
         else {
             assertionFailure("should not enter here")
             return UITableViewCell()
@@ -164,17 +131,16 @@ extension HomeViewController: UITableViewDataSource {
     
 }
 
-
-extension HomeViewController: UITableViewDelegate {
+extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard 
+        guard
             let router = router,
-            var dataStore = router.dataStore,
+          //  var dataStore = router.dataStore,
             let photoId = self.tableContent?.results?[indexPath.row].id
         else {
             return
         }
-        dataStore.photoId = photoId
-        router.routeToDetail(source: self)
+      //  dataStore.photoId = photoId
+       // router.routeToDetail(source: self)
     }
 }
