@@ -17,6 +17,17 @@
 "success" = "Success";
 "favorite_added" = "Favorite added";
 "favorite_removed" = "Favorite removed";
+"no_favorites" = "No favorites to show.";
+"no_results" = "No results to show.\nDo a search to see some results";
+
+
+// Errors:
+
 "error_add_favorite" = "Error adding Favorite";
 "error_removed_favorite" = "Error removing Favorite";
-
+"error_connection" = "Connection error";
+"error_api" = "API error";
+"error_parsing" = "Parsing error";
+"error_request" = "Request error";
+"error_model" = "Model error";
+"error_unknown" = "Unknown error";

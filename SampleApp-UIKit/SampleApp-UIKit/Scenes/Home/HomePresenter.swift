@@ -9,7 +9,7 @@ import UIKit
 
 protocol HomePresentationLogic {
     func present(response: Home.Fetch.Response)
-    func present(error: Error)
+    func present(error: SampleAppError)
 }
 
 final class HomePresenter: HomePresentationLogic {
@@ -29,7 +29,7 @@ final class HomePresenter: HomePresentationLogic {
         viewController?.display(totalResults: response.total, totalPages: response.total_pages, viewModel: Home.Fetch.ViewModel(results: searchResults, error: nil))
     }
     
-    func present(error: Error) {
+    func present(error: SampleAppError) {
         let viewModel = Home.Fetch.ViewModel(results: nil, error: error)
         viewController?.display(totalResults: 0, totalPages: 0, viewModel: viewModel)
     }

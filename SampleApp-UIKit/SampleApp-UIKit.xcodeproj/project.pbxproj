@@ -43,6 +43,8 @@
 		D4EA30C32B86210A000B562E /* FavoritesInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30C22B86210A000B562E /* FavoritesInteractor.swift */; };
 		D4EA30C52B862119000B562E /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30C42B862119000B562E /* FavoritesViewController.swift */; };
 		D4EA30C72B862759000B562E /* FavoriteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30C62B862759000B562E /* FavoriteItem.swift */; };
+		D4EA30C92B864DB2000B562E /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30C82B864DB2000B562E /* UITableView.swift */; };
+		D4EA30CB2B8659CA000B562E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EA30CA2B8659CA000B562E /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,8 @@
 		D4EA30C22B86210A000B562E /* FavoritesInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesInteractor.swift; sourceTree = "<group>"; };
 		D4EA30C42B862119000B562E /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		D4EA30C62B862759000B562E /* FavoriteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteItem.swift; sourceTree = "<group>"; };
+		D4EA30C82B864DB2000B562E /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		D4EA30CA2B8659CA000B562E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +194,7 @@
 				D4D580A22B7E3324006A5F2B /* Home */,
 				D4D580A32B7E332E006A5F2B /* Detail */,
 				D4EA30B82B861FD0000B562E /* Favorites */,
+				D4EA30CA2B8659CA000B562E /* BaseViewController.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 				D4EA30B42B860351000B562E /* Result.swift */,
 				D4EA30B62B861A40000B562E /* UIViewController.swift */,
 				D4EA30C62B862759000B562E /* FavoriteItem.swift */,
+				D4EA30C82B864DB2000B562E /* UITableView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -442,11 +448,13 @@
 				D485BE302B80C463003C2A3A /* APIClient.swift in Sources */,
 				D4D580B72B7E3359006A5F2B /* DetailWorker.swift in Sources */,
 				D4C173A22B7E31690070F560 /* AppDelegate.swift in Sources */,
+				D4EA30C92B864DB2000B562E /* UITableView.swift in Sources */,
 				D4EA30B72B861A40000B562E /* UIViewController.swift in Sources */,
 				D4D580B62B7E3359006A5F2B /* DetailPresenter.swift in Sources */,
 				D4D580AE2B7E334B006A5F2B /* HomeViewController.swift in Sources */,
 				D4EA30BA2B861FEE000B562E /* FavoritesWorker.swift in Sources */,
 				D4D580BB2B7E3359006A5F2B /* DetailInteractor.swift in Sources */,
+				D4EA30CB2B8659CA000B562E /* BaseViewController.swift in Sources */,
 				D4D580AB2B7E334B006A5F2B /* HomeWorker.swift in Sources */,
 				D4EA30B52B860351000B562E /* Result.swift in Sources */,
 				D4D580AF2B7E334B006A5F2B /* HomeInteractor.swift in Sources */,

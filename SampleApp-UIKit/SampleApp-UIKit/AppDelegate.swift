@@ -20,9 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navcon
         window?.makeKeyAndVisible()
         
-        let dmManager = DataModelManager(modelName: "DataModel")
-        print(dmManager.managedObjectContext)
-        
         return true
     }
 

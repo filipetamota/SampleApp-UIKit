@@ -12,7 +12,7 @@ protocol HomeDisplayLogic: AnyObject {
     func display(totalResults: Int, totalPages: Int, viewModel: Home.Fetch.ViewModel)
 }
 
-final class HomeViewController: UIViewController, HomeDisplayLogic {
+final class HomeViewController: BaseViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
     
@@ -24,7 +24,9 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
     
     fileprivate var totalResults: Int?
     fileprivate var totalPages: Int?
-    fileprivate var tableContent: Home.Fetch.ViewModel?
+    fileprivate var currentPage: Int = 1
+    fileprivate var currentQuery: String?
+    fileprivate var tableContent: [SearchResult] = []
     
     // MARK: UI
     
@@ -83,6 +85,7 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
         let barButton = UIBarButtonItem(image: UIImage(named: "btn_show_favorites"), style: .plain, target: self, action: #selector(openFavorites))
         barButton.tintColor = .black
         navigationItem.rightBarButtonItem = barButton
+        navigationItem.hidesSearchBarWhenScrolling = false
         
         searchBarController.searchBar.delegate = self
         searchBarController.obscuresBackgroundDuringPresentation = false
@@ -114,18 +117,27 @@ final class HomeViewController: UIViewController, HomeDisplayLogic {
     // MARK: Fetch and display methods
     
     private func fetch(query: String) {
-        interactor?.fetch(query: query)
+        showLoadingIndicator()
+        interactor?.fetch(query: query, page: self.currentPage)
     }
     
     func display(totalResults: Int, totalPages: Int, viewModel: Home.Fetch.ViewModel) {
-        self.totalResults = totalResults
-        self.totalPages = totalPages
-        self.tableContent = viewModel
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        if let error = viewModel.error {
+            DispatchQueue.main.async {
+                self.presentErrorAlert(error: error)
+            }
+            return
+        } else if let results = viewModel.results {
+            self.totalResults = totalResults
+            self.totalPages = totalPages
+            self.tableContent.append(contentsOf: results)
+            self.currentPage += 1
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.hideLoadingIndicator()
+            }
         }
     }
-  
 }
 
 extension HomeViewController: UISearchBarDelegate {
@@ -133,17 +145,27 @@ extension HomeViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
         guard let query = searchBar.text else { return }
         fetch(query: query)
+        currentQuery = query
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
+        currentQuery = nil
+        tableContent.removeAll()
+        tableView.reloadData()
     }
 }
 
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.tableContent?.results?.count ?? 0
+        let numberOfRows = self.tableContent.count
+        if numberOfRows == 0 {
+            tableView.setPlaceholder(NSLocalizedString("no_results", comment: ""))
+        } else {
+            tableView.removePlaceholder()
+        }
+        return numberOfRows
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -151,30 +173,34 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard 
-            let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.identifier, for: indexPath) as? ResultCell,
-            let result = self.tableContent?.results?[indexPath.row]
-        else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.identifier, for: indexPath) as? ResultCell else {
             assertionFailure("should not enter here")
             return UITableViewCell()
         }
-        cell.setup(result: result)
+        cell.setup(result: self.tableContent[indexPath.row])
         return cell
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if 
+            indexPath.row == self.tableContent.count - 1,
+            tableContent.count < totalResults ?? 0,
+            let query = currentQuery
+        {
+            fetch(query: query)
+        }
+    }
 }
-
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard 
             let router = router,
-            var dataStore = router.dataStore,
-            let photoId = self.tableContent?.results?[indexPath.row].id
+            var dataStore = router.dataStore
         else {
             return
         }
-        dataStore.photoId = photoId
+        dataStore.photoId = self.tableContent[indexPath.row].id
         router.routeToDetail(source: self)
     }
 }

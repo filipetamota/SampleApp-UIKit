@@ -15,20 +15,20 @@ extension UIViewController {
         case .success(let favOp):
             presentAlert(title: NSLocalizedString("success", comment: ""), message: favOp.successAlertMessage())
         case .failure(let error):
-            switch error {
-            case .addFavoriteError:
-                presentAlert(title: NSLocalizedString("error", comment: ""), message: FavoriteOperation.add.errorAlertMessage())
-            case .removeFavoriteError:
-                presentAlert(title: NSLocalizedString("error", comment: ""), message: FavoriteOperation.remove.errorAlertMessage())
+            presentErrorAlert(error: error)
             default:
                 assertionFailure()
-            }
         }
-        
     }
     
     func presentAlert(title: String? = nil, message: String? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func presentErrorAlert(error: SampleAppError) {
+        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.errorMessage(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }

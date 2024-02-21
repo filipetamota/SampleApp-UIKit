@@ -8,15 +8,36 @@
 import UIKit
 
 protocol FavoritesRoutingLogic {
+    func routeToDetail(source: FavoritesViewController)
 }
 
-final class FavoritesRouter: NSObject, FavoritesRoutingLogic {
+protocol FavoritesDataPassing {
+    var dataStore: FavoritesDataStore? { get }
+}
+
+final class FavoritesRouter: NSObject, FavoritesRoutingLogic, FavoritesDataPassing {
     weak var viewController: FavoritesViewController?
-    
+    var dataStore: FavoritesDataStore?
+
     // MARK: Routing
+    
+    func routeToDetail(source: FavoritesViewController) {
+        let destinationVC = DetailViewController()
+        guard var destinationDS = destinationVC.router?.dataStore else { return }
+        passDataToDetail(source: dataStore!, destination: &destinationDS)
+        navigateToDetail(source: source, destination: destinationVC)
+    }
     
     // MARK: Navigation
     
+    func navigateToDetail(source: FavoritesViewController, destination: DetailViewController) {
+        source.navigationController?.pushViewController(destination, animated: true)
+    }
+    
     // MARK: Passing data
+    
+    func passDataToDetail(source: FavoritesDataStore, destination: inout DetailDataStore) {
+        destination.photoId = source.favId
+    }
     
 }

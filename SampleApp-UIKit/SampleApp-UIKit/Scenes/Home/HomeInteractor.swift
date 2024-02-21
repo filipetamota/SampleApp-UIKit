@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HomeBusinessLogic {
-    func fetch(query: String)
+    func fetch(query: String, page: Int)
 }
 
 protocol HomeDataStore {
@@ -21,9 +21,9 @@ final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var worker: HomeWorker?
     typealias Request = Home.Fetch.Request
   
-    func fetch(query: String) {
+    func fetch(query: String, page: Int) {
         worker = HomeWorker()
-        worker?.fetch(request: Request(query: query, data: .search), completion: { result in
+        worker?.fetch(request: Request(query: query, page: page, data: .search), completion: { result in
             switch result {
             case .success(let response):
                 self.presenter?.present(response: response)

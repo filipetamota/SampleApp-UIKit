@@ -18,7 +18,6 @@ protocol DetailDataStore {
 }
 
 class DetailInteractor: DetailBusinessLogic, DetailDataStore {
-    
     var photoId: String = ""
     var presenter: DetailPresentationLogic?
     var worker: DetailWorker?

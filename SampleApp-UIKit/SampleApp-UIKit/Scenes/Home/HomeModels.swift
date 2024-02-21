@@ -11,6 +11,7 @@ enum Home {
     enum Fetch {
         struct Request {
             let query: String
+            let page: Int
             let data: RequestData
         }
         
@@ -22,7 +23,7 @@ enum Home {
         
         struct ViewModel {
             let results: [SearchResult]?
-            let error: Error?
+            let error: SampleAppError?
         }
     }
 }

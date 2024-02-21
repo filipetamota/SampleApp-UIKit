@@ -11,9 +11,9 @@ protocol FavoritesDisplayLogic: AnyObject {
     func display(viewModel: Favorites.Fetch.ViewModel)
 }
 
-final class FavoritesViewController: UIViewController, FavoritesDisplayLogic {
+final class FavoritesViewController: BaseViewController, FavoritesDisplayLogic {
     var interactor: FavoritesBusinessLogic?
-    var router: (NSObjectProtocol & FavoritesRoutingLogic)?
+    var router: (NSObjectProtocol & FavoritesRoutingLogic & FavoritesDataPassing)?
     
     static let cache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
@@ -23,7 +23,7 @@ final class FavoritesViewController: UIViewController, FavoritesDisplayLogic {
     
     fileprivate var totalResults: Int?
     fileprivate var totalPages: Int?
-    fileprivate var tableContent: Favorites.Fetch.ViewModel?
+    fileprivate var tableContent: [FavoriteItem]?
     
     // MARK: UI
     
@@ -58,6 +58,7 @@ final class FavoritesViewController: UIViewController, FavoritesDisplayLogic {
         interactor.presenter = presenter
         presenter.viewController = viewController
         router.viewController = viewController
+        router.dataStore = interactor
     }
     
     // MARK: View lifecycle
@@ -66,6 +67,11 @@ final class FavoritesViewController: UIViewController, FavoritesDisplayLogic {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+    
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetch()
     }
     
@@ -95,22 +101,38 @@ final class FavoritesViewController: UIViewController, FavoritesDisplayLogic {
     // MARK: Fetch and display methods
     
     func fetch() {
+        showLoadingIndicator()
         interactor?.fetch()
     }
     
     func display(viewModel: Favorites.Fetch.ViewModel) {
-        self.tableContent = viewModel
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        if let error = viewModel.error {
+            DispatchQueue.main.async {
+                self.presentErrorAlert(error: error)
+            }
+            return
+        } else if let result = viewModel.results {
+            self.tableContent = result
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.hideLoadingIndicator()
+            }
+        } else {
+            fetch()
         }
     }
-  
 }
 
 extension FavoritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.tableContent?.results?.count ?? 0
+        let numberOfRows =  self.tableContent?.count ?? 0
+        if numberOfRows == 0 {
+            tableView.setPlaceholder(NSLocalizedString("no_favorites", comment: ""))
+        } else {
+            tableView.removePlaceholder()
+        }
+        return numberOfRows
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -120,7 +142,7 @@ extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.identifier, for: indexPath) as? ResultCell,
-            let result = self.tableContent?.results?[indexPath.row].toSearchResult()
+            let result = self.tableContent?[indexPath.row].toSearchResult()
         else {
             assertionFailure("should not enter here")
             return UITableViewCell()
@@ -135,12 +157,33 @@ extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard
             let router = router,
-          //  var dataStore = router.dataStore,
-            let photoId = self.tableContent?.results?[indexPath.row].id
+            var dataStore = router.dataStore,
+            let favoriteItem = self.tableContent?[indexPath.row],
+            let favId = favoriteItem.favId
         else {
             return
         }
-      //  dataStore.photoId = photoId
-       // router.routeToDetail(source: self)
+        dataStore.favId = favId
+        router.routeToDetail(source: self)
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "Remove favorite"
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            guard
+                let favoriteItem = self.tableContent?[indexPath.row],
+                let favId = favoriteItem.favId
+            else {
+                return
+            }
+            interactor?.removeFavorite(favId: favId)
+        }
     }
 }

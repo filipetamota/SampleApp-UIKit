@@ -8,20 +8,26 @@
 import UIKit
 
 protocol FavoritesPresentationLogic {
-    func present(response: Favorites.Fetch.Response)
-    func present(error: SampleAppError)
+    func presentResults(response: Favorites.Fetch.Response)
+    func presentDeleteSuccess()
+    func presentError(error: SampleAppError)
 }
 
 final class FavoritesPresenter: FavoritesPresentationLogic {
     weak var viewController: FavoritesDisplayLogic?
     typealias ViewModel = Favorites.Fetch.ViewModel
   
-    func present(response: Favorites.Fetch.Response) {
+    func presentResults(response: Favorites.Fetch.Response) {
         let viewModel = ViewModel(results: response.results, error: nil)
         viewController?.display(viewModel: viewModel)
     }
     
-    func present(error: SampleAppError) {
+    func presentDeleteSuccess() {
+        let viewModel = ViewModel(results: nil, error: nil)
+        viewController?.display(viewModel: viewModel)
+    }
+    
+    func presentError(error: SampleAppError) {
         let viewModel = ViewModel(results: nil, error: error)
         viewController?.display(viewModel: viewModel)
     }

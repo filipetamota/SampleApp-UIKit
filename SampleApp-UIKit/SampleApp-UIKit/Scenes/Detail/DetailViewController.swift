@@ -11,7 +11,7 @@ protocol DetailDisplayLogic: AnyObject {
     func display(viewModel: Detail.Fetch.ViewModel)
 }
 
-final class DetailViewController: UIViewController, DetailDisplayLogic {
+final class DetailViewController: BaseViewController, DetailDisplayLogic {
     var interactor: DetailBusinessLogic?
     var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
     private var currentResult: DetailResult?
@@ -162,6 +162,7 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
     // MARK: Fetch and display methods
     
     private func fetch() {
+        showLoadingIndicator()
         interactor?.fetch()
     }
     
@@ -188,8 +189,8 @@ final class DetailViewController: UIViewController, DetailDisplayLogic {
             self.imgView.loadImageFromUrl(urlString: result.imgUrl)
             self.setupBarButton(photoId: result.id)
             self.view.layoutIfNeeded()
+            self.hideLoadingIndicator()
         }
-        
     }
     
     @objc private func addRemoveFavorite() {
