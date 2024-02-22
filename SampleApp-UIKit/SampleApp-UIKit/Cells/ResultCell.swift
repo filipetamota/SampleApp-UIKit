@@ -71,12 +71,12 @@ final class ResultCell: UITableViewCell {
     
     // MARK: Setup methods
     
-    func setupView() {
+    private func setupView() {
         backgroundColor = .white
         selectionStyle = .none
         [imgView, titleTextLabel, authorTextLabel, likesTextLabel].forEach { contentView.addSubview($0) }
     }
-    // TODO: set up constraint variable
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             imgView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
@@ -90,7 +90,7 @@ final class ResultCell: UITableViewCell {
             titleTextLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             
             authorTextLabel.leftAnchor.constraint(equalTo: imgView.rightAnchor, constant: 20),
-            authorTextLabel.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -16),
+            authorTextLabel.rightAnchor.constraint(lessThanOrEqualTo: likesTextLabel.leftAnchor, constant: -10),
             authorTextLabel.topAnchor.constraint(greaterThanOrEqualTo: titleTextLabel.bottomAnchor, constant: 20),
             authorTextLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
@@ -103,8 +103,8 @@ final class ResultCell: UITableViewCell {
     
     func setup(result: SearchResult){
         titleTextLabel.text = result.alt_description?.capitalizeSentence
-        authorTextLabel.text = "By \(result.userName)".capitalized
-        likesTextLabel.text = "\(result.likes) likes"
+        authorTextLabel.text = result.userName.capitalized
+        likesTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("number_of_likes", comment: ""), result.likes)
         imgView.loadImageFromUrl(urlString: result.thumbUrl)
     }
 }

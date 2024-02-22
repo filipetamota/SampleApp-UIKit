@@ -15,14 +15,6 @@ final class FavoritesViewController: BaseViewController, FavoritesDisplayLogic {
     var interactor: FavoritesBusinessLogic?
     var router: (NSObjectProtocol & FavoritesRoutingLogic & FavoritesDataPassing)?
     
-    static let cache: NSCache<NSString, UIImage> = {
-        let cache = NSCache<NSString, UIImage>()
-        cache.name = "Images Cache"
-        return cache
-    } ()
-    
-    fileprivate var totalResults: Int?
-    fileprivate var totalPages: Int?
     fileprivate var tableContent: [FavoriteItem]?
     
     // MARK: UI
@@ -172,7 +164,7 @@ extension FavoritesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "Remove favorite"
+        return NSLocalizedString("remove_favorite", comment: "")
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

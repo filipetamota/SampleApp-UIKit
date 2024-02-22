@@ -16,12 +16,6 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
     
-    static let cache: NSCache<NSString, UIImage> = {
-        let cache = NSCache<NSString, UIImage>()
-        cache.name = "Images Cache"
-        return cache
-    } ()
-    
     fileprivate var totalResults: Int?
     fileprivate var totalPages: Int?
     fileprivate var currentPage: Int = 1

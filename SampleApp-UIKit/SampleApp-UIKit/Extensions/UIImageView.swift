@@ -10,7 +10,7 @@ import UIKit
 
 extension UIImageView {
     func loadImageFromUrl(urlString: String) {
-        if let image = HomeViewController.cache.object(forKey: NSString(string: urlString)) {
+        if let image = Utils.cache.object(forKey: NSString(string: urlString)) {
             self.image = image
             return
         }
@@ -21,7 +21,7 @@ extension UIImageView {
                 if let data = data {
                     if let image = UIImage(data: data) {
                         self.image = image
-                        HomeViewController.cache.setObject(image, forKey: NSString(string: urlString))
+                        Utils.cache.setObject(image, forKey: NSString(string: urlString))
                     }
                 }
             }

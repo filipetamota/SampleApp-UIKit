@@ -21,7 +21,7 @@ final class HomeWorker {
                 let response = try JSONDecoder().decode(Home.Fetch.Response.self, from: dataResponse)
                 completion(.success(response))
             } catch {
-                completion(.failure(.parsingError))
+                completion(.failure(.apiError))
             }
         }
     }

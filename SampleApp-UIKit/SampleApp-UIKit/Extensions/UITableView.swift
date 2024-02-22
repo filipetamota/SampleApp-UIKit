@@ -20,9 +20,7 @@ extension UITableView {
         self.backgroundView = label
         self.separatorStyle = .none
     }
-}
-
-extension UITableView {
+    
     func removePlaceholder() {
         self.isScrollEnabled = true
         self.backgroundView = nil

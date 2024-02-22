@@ -42,7 +42,7 @@ class APIClient {
         return result.0
     }
     
-    func validate(data: Data, response: URLResponse) throws {
+    private func validate(data: Data, response: URLResponse) throws {
         guard let code = (response as? HTTPURLResponse)?.statusCode else {
             throw SampleAppError.connectionError(data)
         }

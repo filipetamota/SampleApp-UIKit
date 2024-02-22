@@ -137,9 +137,6 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
         navigationItem.rightBarButtonItem = barButton
     }
     
-    private var heightConstraint: NSLayoutConstraint!
-    
-    
     private func setupConstraints(multiplier: CGFloat) {
         NSLayoutConstraint.activate([
             scrollView.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
@@ -172,25 +169,33 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
             return
         }
         currentResult = result
-        let aspectRatio = Double(result.height) / Double(result.width)
         DispatchQueue.main.async {
-            self.titleTextLabel.text = result.alt_description?.capitalizeSentence
-            self.subtitleTextLabel.text = result.description
-            self.infoTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("taken_by", comment: ""), result.userName)
-            if let location = result.location {
-                self.infoTextLabel.text?.append(String.localizedStringWithFormat(NSLocalizedString("taken_in", comment: ""), location))
-            }
-            if let equipment = result.equipment {
-                self.infoTextLabel.text?.append(String.localizedStringWithFormat(NSLocalizedString("taken_with", comment: ""), equipment))
-            }
-            self.infoTextLabel.text?.append(".")
-            self.likesTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("number_of_likes", comment: ""), result.likes)
-            self.setupConstraints(multiplier: aspectRatio)
-            self.imgView.loadImageFromUrl(urlString: result.imgUrl)
-            self.setupBarButton(photoId: result.id)
-            self.view.layoutIfNeeded()
-            self.hideLoadingIndicator()
+            self.loadDetail()
         }
+    }
+    
+    private func loadDetail() {
+        guard let result = currentResult else {
+            assertionFailure("CurrentResult shouldn't be nil")
+            return
+        }
+        let aspectRatio = Double(result.height) / Double(result.width)
+        titleTextLabel.text = result.alt_description?.capitalizeSentence
+        subtitleTextLabel.text = result.description
+        infoTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("taken_by", comment: ""), result.userName.capitalized)
+        if let location = result.location {
+            infoTextLabel.text?.append(String.localizedStringWithFormat(NSLocalizedString("taken_in", comment: ""), location))
+        }
+        if let equipment = result.equipment {
+            infoTextLabel.text?.append(String.localizedStringWithFormat(NSLocalizedString("taken_with", comment: ""), equipment))
+        }
+        infoTextLabel.text?.append(".")
+        likesTextLabel.text = String.localizedStringWithFormat(NSLocalizedString("number_of_likes", comment: ""), result.likes)
+        setupConstraints(multiplier: aspectRatio)
+        imgView.loadImageFromUrl(urlString: result.imgUrl)
+        setupBarButton(photoId: result.id)
+        view.layoutIfNeeded()
+        hideLoadingIndicator()
     }
     
     @objc private func addRemoveFavorite() {

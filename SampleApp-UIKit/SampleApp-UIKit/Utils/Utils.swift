@@ -6,8 +6,15 @@
 //
 
 import Foundation
+import UIKit
 
 final class Utils {
+    
+    static let cache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.name = "Images Cache"
+        return cache
+    } ()
 
     static func buildURLRequest(requestData: RequestData, queryParams: [URLQueryItem]? = nil, pathVariable: String? = nil) -> URLRequest? {
         guard

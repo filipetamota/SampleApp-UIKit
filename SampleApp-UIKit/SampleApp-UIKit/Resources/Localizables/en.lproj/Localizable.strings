@@ -17,9 +17,10 @@
 "success" = "Success";
 "favorite_added" = "Favorite added";
 "favorite_removed" = "Favorite removed";
+"remove_favorite" = "Remove favorite";
 "no_favorites" = "No favorites to show.";
 "no_results" = "No results to show.\nDo a search to see some results";
-
+"author_unknown" = "Author Unknown";
 
 // Errors:
 

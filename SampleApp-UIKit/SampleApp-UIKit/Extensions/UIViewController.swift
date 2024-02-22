@@ -16,8 +16,6 @@ extension UIViewController {
             presentAlert(title: NSLocalizedString("success", comment: ""), message: favOp.successAlertMessage())
         case .failure(let error):
             presentErrorAlert(error: error)
-            default:
-                assertionFailure()
         }
     }
     

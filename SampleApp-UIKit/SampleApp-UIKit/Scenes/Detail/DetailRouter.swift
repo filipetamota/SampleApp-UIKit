@@ -7,9 +7,7 @@
 
 import UIKit
 
-@objc protocol DetailRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
-}
+@objc protocol DetailRoutingLogic { }
 
 protocol DetailDataPassing {
     var dataStore: DetailDataStore? { get }
