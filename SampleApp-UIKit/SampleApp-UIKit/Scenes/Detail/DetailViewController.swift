@@ -123,13 +123,13 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
     }
     
     private func setupBarButton(photoId: String? = nil) {
-        var image = UIImage(named: "btn_add_favorite")
+        var image = UIImage(systemName: "bookmark.circle")
         if
             let photoId = photoId,
             let interactor = interactor,
             interactor.isFavorite(photoId: photoId)
         {
-            image = UIImage(named: "btn_delete_favorite")
+            image = UIImage(systemName: "bookmark.circle.fill")
         }
         
         let barButton = UIBarButtonItem(image: image, style: .plain, target: self, action:  #selector(addRemoveFavorite))

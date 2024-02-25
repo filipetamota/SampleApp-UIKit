@@ -76,7 +76,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
     private func setupView() {
         title = NSLocalizedString("search_title", comment: "")
         view.backgroundColor = .white
-        let barButton = UIBarButtonItem(image: UIImage(named: "btn_show_favorites"), style: .plain, target: self, action: #selector(openFavorites))
+        let barButton = UIBarButtonItem(image: UIImage(systemName: "book"), style: .plain, target: self, action: #selector(openFavorites))
         barButton.tintColor = .black
         navigationItem.rightBarButtonItem = barButton
         navigationItem.hidesSearchBarWhenScrolling = false
