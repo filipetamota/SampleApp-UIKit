@@ -23,7 +23,7 @@ enum Home {
         
         struct ViewModel {
             let results: [SearchResult]?
-            let error: SampleAppError?
+            let error: URLError?
         }
     }
 }

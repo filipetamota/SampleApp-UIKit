@@ -26,9 +26,5 @@
 
 "error_add_favorite" = "Error adding Favorite";
 "error_removed_favorite" = "Error removing Favorite";
-"error_connection" = "Connection error";
-"error_api" = "API error";
-"error_parsing" = "Parsing error";
-"error_request" = "Request error";
 "error_model" = "Model error";
 "error_unknown" = "Unknown error";

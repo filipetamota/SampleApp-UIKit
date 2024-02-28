@@ -9,7 +9,7 @@ import UIKit
 
 protocol DetailBusinessLogic {
     func fetch()
-    func addRemoveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, SampleAppError>) -> Void)
+    func addRemoveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void)
     func isFavorite(photoId: String) -> Bool
 }
 
@@ -45,7 +45,7 @@ final class DetailInteractor: DetailBusinessLogic, DetailDataStore {
 
     }
     
-    func addRemoveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, SampleAppError>) -> Void) {
+    func addRemoveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
         if isFavorite(photoId: favorite.id) {
             deleteFavorite(photoId: favorite.id, completion: completion)
         } else {
@@ -53,12 +53,12 @@ final class DetailInteractor: DetailBusinessLogic, DetailDataStore {
         }
     }
     
-    private func addFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, SampleAppError>) -> Void) {
+    private func addFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
         favoritesWorker = FavoritesWorker()
         favoritesWorker?.saveFavorite(favorite: favorite, completion: completion)
     }
     
-    private func deleteFavorite(photoId: String, completion: @escaping (Result<FavoriteOperation, SampleAppError>) -> Void) {
+    private func deleteFavorite(photoId: String, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
         favoritesWorker = FavoritesWorker()
         favoritesWorker?.deleteFavorite(photoId: photoId, completion: completion)
     }

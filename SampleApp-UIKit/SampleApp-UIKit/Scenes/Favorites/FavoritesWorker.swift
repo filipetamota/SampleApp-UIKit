@@ -27,10 +27,30 @@ enum FavoriteOperation {
     }
 }
 
+enum ModelError: Error {
+    case addFavoriteError
+    case removeFavoriteError
+    case modelError
+    case unknownError
+    
+    func errorMessage() -> String {
+        switch self {
+        case .addFavoriteError:
+            return NSLocalizedString("error_add_favorite", comment: "")
+        case .removeFavoriteError:
+            return NSLocalizedString("error_removed_favorite", comment: "")
+        case .modelError:
+            return NSLocalizedString("error_model", comment: "")
+        case .unknownError:
+            return NSLocalizedString("error_unknown", comment: "")
+        }
+    }
+}
+
 final class FavoritesWorker {
     
     func getAllFavorites() throws -> [FavoriteItem] {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { throw SampleAppError.unknownError }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { throw ModelError.unknownError }
         let managedContext = appDelegate.persistentContainer.viewContext
         
         let fetchRequest: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
@@ -38,7 +58,7 @@ final class FavoritesWorker {
     }
     
     func getFavorite(photoId: String) throws -> [FavoriteItem] {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { throw SampleAppError.unknownError }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { throw ModelError.unknownError }
         let managedContext = appDelegate.persistentContainer.viewContext
         
         let fetchRequest: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
@@ -57,15 +77,15 @@ final class FavoritesWorker {
         }
     }
     
-    func saveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, SampleAppError>) -> Void) {
+    func saveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            completion(.failure(SampleAppError.addFavoriteError))
+            completion(.failure(ModelError.unknownError))
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
         
         guard let favoriteEntity = NSEntityDescription.entity(forEntityName: "FavoriteItem", in: managedContext) else {
-            completion(.failure(SampleAppError.addFavoriteError))
+            completion(.failure(ModelError.modelError))
             return
         }
         let favoriteObject = NSManagedObject(entity: favoriteEntity, insertInto: managedContext)
@@ -85,15 +105,15 @@ final class FavoritesWorker {
             try managedContext.save()
             completion(.success(.add))
         } catch {
-            completion(.failure(SampleAppError.addFavoriteError))
+            completion(.failure(ModelError.addFavoriteError))
             return
         }
         
     }
     
-    func deleteFavorite(photoId: String, completion: @escaping (Result<FavoriteOperation, SampleAppError>) -> Void) {
+    func deleteFavorite(photoId: String, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            completion(.failure(SampleAppError.removeFavoriteError))
+            completion(.failure(ModelError.unknownError))
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -107,7 +127,7 @@ final class FavoritesWorker {
             try managedContext.save()
             completion(.success(.remove))
         } catch {
-            completion(.failure(SampleAppError.removeFavoriteError))
+            completion(.failure(ModelError.removeFavoriteError))
         }
     }
 }

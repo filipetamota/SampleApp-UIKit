@@ -10,7 +10,7 @@ import UIKit
 
 extension UIViewController {
     
-    func presentFavoriteAlert(result: Result<FavoriteOperation, SampleAppError>) {
+    func presentFavoriteAlert(result: Result<FavoriteOperation, ModelError>) {
         switch result {
         case .success(let favOp):
             presentAlert(title: NSLocalizedString("success", comment: ""), message: favOp.successAlertMessage())
@@ -25,8 +25,12 @@ extension UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func presentErrorAlert(error: SampleAppError) {
-        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: error.errorMessage(), preferredStyle: .alert)
+    func presentErrorAlert(error: Error) {
+        var errorMessage = error.localizedDescription
+        if let error = error as? ModelError {
+            errorMessage = error.errorMessage()
+        }
+        let alert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: errorMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }

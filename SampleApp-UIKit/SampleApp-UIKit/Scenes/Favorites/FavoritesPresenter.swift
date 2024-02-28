@@ -10,7 +10,7 @@ import UIKit
 protocol FavoritesPresentationLogic {
     func presentResults(response: Favorites.Fetch.Response)
     func presentDeleteSuccess()
-    func presentError(error: SampleAppError)
+    func presentError(error: ModelError)
 }
 
 final class FavoritesPresenter: FavoritesPresentationLogic {
@@ -27,7 +27,7 @@ final class FavoritesPresenter: FavoritesPresentationLogic {
         viewController?.display(viewModel: viewModel)
     }
     
-    func presentError(error: SampleAppError) {
+    func presentError(error: ModelError) {
         let viewModel = ViewModel(results: nil, error: error)
         viewController?.display(viewModel: viewModel)
     }

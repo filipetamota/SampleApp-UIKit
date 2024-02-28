@@ -16,7 +16,7 @@ enum Favorites {
         
         struct ViewModel {
             let results: [FavoriteItem]?
-            let error: SampleAppError?
+            let error: ModelError?
         }
     }
 }

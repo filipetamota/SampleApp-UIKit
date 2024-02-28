@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4455E2E2B80DC890015EFC1 /* SampleAppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4455E2D2B80DC890015EFC1 /* SampleAppError.swift */; };
 		D485BE302B80C463003C2A3A /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D485BE2F2B80C463003C2A3A /* APIClient.swift */; };
 		D4B392A62B8F6AE800CA01A1 /* APIInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = D4B392A52B8F6AE800CA01A1 /* APIInfo.plist */; };
 		D4C173A22B7E31690070F560 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C173A12B7E31690070F560 /* AppDelegate.swift */; };
@@ -68,7 +67,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D4455E2D2B80DC890015EFC1 /* SampleAppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleAppError.swift; sourceTree = "<group>"; };
 		D485BE2F2B80C463003C2A3A /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		D4B392A52B8F6AE800CA01A1 /* APIInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = APIInfo.plist; sourceTree = "<group>"; };
 		D4C1739E2B7E31690070F560 /* SampleApp-UIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SampleApp-UIKit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -263,7 +261,6 @@
 		D4EA30532B851892000B562E /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				D4455E2D2B80DC890015EFC1 /* SampleAppError.swift */,
 				D4EA30542B8518A1000B562E /* Utils.swift */,
 			);
 			path = Utils;
@@ -496,7 +493,6 @@
 				D4EA30BE2B8620EF000B562E /* FavoritesRouter.swift in Sources */,
 				D4EA30C52B862119000B562E /* FavoritesViewController.swift in Sources */,
 				D4D580AD2B7E334B006A5F2B /* HomeModels.swift in Sources */,
-				D4455E2E2B80DC890015EFC1 /* SampleAppError.swift in Sources */,
 				D4EA30C72B862759000B562E /* FavoriteItem.swift in Sources */,
 				D4EA30AD2B85F27E000B562E /* DataModelManager.swift in Sources */,
 				D4EA30552B8518A1000B562E /* Utils.swift in Sources */,

@@ -10,10 +10,10 @@ import CoreData
 
 final class DetailWorker {
     
-    func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, SampleAppError>) -> Void) {
+    func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void) {
         
         guard let urlRequest = Utils.buildURLRequest(requestData: request.data, pathVariable: request.photoId) else {
-            completion(.failure(.requestError))
+            completion(.failure(URLError(.badURL)))
             return
         }
         let apiClient = APIClient()
@@ -23,7 +23,7 @@ final class DetailWorker {
                 let response = try JSONDecoder().decode(Detail.Fetch.Response.self, from: dataResponse)
                 completion(.success(response))
             } catch {
-                completion(.failure(.apiError))
+                completion(.failure(URLError(.cannotDecodeContentData)))
             }
         }
     }
