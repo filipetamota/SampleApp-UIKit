@@ -119,6 +119,7 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         if let error = viewModel.error {
             DispatchQueue.main.async {
                 self.presentErrorAlert(error: error)
+                self.hideLoadingIndicator()
             }
             return
         } else if let results = viewModel.results {
@@ -194,7 +195,7 @@ extension HomeViewController: UITableViewDelegate {
         else {
             return
         }
-        dataStore.photoId = self.tableContent[indexPath.row].id
+        dataStore.photoId = self.tableContent[indexPath.row].photoId
         router.routeToDetail(source: self)
     }
 }

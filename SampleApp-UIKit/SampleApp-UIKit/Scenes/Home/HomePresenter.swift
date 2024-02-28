@@ -19,7 +19,7 @@ final class HomePresenter: HomePresentationLogic {
         var searchResults: [SearchResult] = []
         
         for result in response.results {
-            searchResults.append(SearchResult(id: result.id,
+            searchResults.append(SearchResult(photoId: result.photoId,
                                               alt_description: result.alt_description,
                                               likes: result.likes,
                                               thumbUrl: result.urls.thumb,

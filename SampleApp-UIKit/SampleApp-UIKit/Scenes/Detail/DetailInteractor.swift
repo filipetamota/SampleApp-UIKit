@@ -17,7 +17,7 @@ protocol DetailDataStore {
     var photoId: String { get set }
 }
 
-class DetailInteractor: DetailBusinessLogic, DetailDataStore {
+final class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var photoId: String = ""
     var presenter: DetailPresentationLogic?
     var worker: DetailWorker?

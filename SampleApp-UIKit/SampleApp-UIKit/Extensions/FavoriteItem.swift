@@ -16,7 +16,7 @@ extension FavoriteItem {
             return nil
         }
         
-        return SearchResult(id: id, alt_description: alt_description, likes: Int(likes), thumbUrl: thumbUrl ?? "", userName: userName ?? NSLocalizedString("author_unknown", comment: ""))
+        return SearchResult(photoId: id, alt_description: alt_description, likes: Int(likes), thumbUrl: thumbUrl ?? "", userName: userName ?? NSLocalizedString("author_unknown", comment: ""))
             
     }
     

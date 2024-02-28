@@ -29,15 +29,20 @@ enum Home {
 }
 
 struct ResponseResult: Decodable {
-    let id: String
+    let photoId: String
     let alt_description: String?
     let likes: Int
     let urls: HomeUrls
     let user: HomeUser
+    
+    private enum CodingKeys: String, CodingKey {
+        case photoId = "id"
+        case alt_description, likes, urls, user
+    }
 }
 
 struct SearchResult: Decodable {
-    let id: String
+    let photoId: String
     let alt_description: String?
     let likes: Int
     let thumbUrl: String
