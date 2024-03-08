@@ -15,7 +15,7 @@ protocol HomeDataStore {
     var photoId: String { get set }
 }
 
-final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
+class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     var photoId: String = ""
     var presenter: HomePresentationLogic?
     var worker: HomeWorker?
@@ -23,6 +23,7 @@ final class HomeInteractor: HomeBusinessLogic, HomeDataStore {
   
     func fetch(query: String, page: Int) {
         worker = HomeWorker()
+        worker?.apiClient = APIClient()
         worker?.fetch(request: Request(query: query, page: page, data: .search), completion: { result in
             switch result {
             case .success(let response):

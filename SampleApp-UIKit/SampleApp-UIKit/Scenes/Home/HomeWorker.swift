@@ -7,14 +7,15 @@
 
 import UIKit
 
-final class HomeWorker {
+class HomeWorker {
+    var apiClient: APIClient!
+
     func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, URLError>) -> Void) {
         
-        guard let urlRequest = Utils.buildURLRequest(requestData: request.data, queryParams: [URLQueryItem(name: "query", value: request.query), URLQueryItem(name: "page", value: String(request.page))]) else {
+        guard let urlRequest = Utils.buildURLRequest(requestData: request.data, queryParams: ["query": request.query, "page": String(request.page)]) else {
             completion(.failure(URLError(.badURL)))
             return
         }
-        let apiClient = APIClient()
         Task {
             do {
                 let dataResponse = try await apiClient.send(request: urlRequest)

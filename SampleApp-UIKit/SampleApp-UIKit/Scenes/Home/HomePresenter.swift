@@ -12,7 +12,7 @@ protocol HomePresentationLogic {
     func present(error: URLError)
 }
 
-final class HomePresenter: HomePresentationLogic {
+class HomePresenter: HomePresentationLogic {
     weak var viewController: HomeDisplayLogic?
   
     func present(response: Home.Fetch.Response) {

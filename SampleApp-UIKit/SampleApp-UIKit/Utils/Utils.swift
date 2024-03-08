@@ -16,7 +16,7 @@ final class Utils {
         return cache
     } ()
 
-    static func buildURLRequest(requestData: RequestData, queryParams: [URLQueryItem]? = nil, pathVariable: String? = nil) -> URLRequest? {
+    static func buildURLRequest(requestData: RequestData, queryParams: [String: String]? = nil, pathVariable: String? = nil) -> URLRequest? {
         guard
             let domain = Bundle.main.object(forInfoDictionaryKey: "Domain") as? String,
             let accessKey = Bundle.main.object(forInfoDictionaryKey: "AccessKey") as? String,
@@ -33,11 +33,10 @@ final class Utils {
         
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
         
-        if 
-            let queryParams = queryParams,
-            requestData.method() == "GET"
-        {
-            components?.queryItems = queryParams
+        if  let queryParams = queryParams {
+            components?.queryItems = queryParams.compactMap({ item in
+                URLQueryItem(name: item.key, value: item.value)
+            })
         }
         
         var urlRequest = URLRequest(url: url)

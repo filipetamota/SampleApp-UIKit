@@ -1,14 +1,13 @@
 //
-//  SampleApp_UIKitTests.swift
+//  FavoritesPresenterTests.swift
 //  SampleApp-UIKitTests
 //
-//  Created by Filipe Mota on 15/2/24.
+//  Created by Filipe Mota on 8/3/24.
 //
 
 import XCTest
-@testable import SampleApp_UIKit
 
-final class SampleApp_UIKitTests: XCTestCase {
+final class FavoritesPresenterTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

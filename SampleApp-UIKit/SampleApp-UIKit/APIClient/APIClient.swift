@@ -28,7 +28,7 @@ enum RequestData {
     }
 }
 
-final class APIClient {
+class APIClient {
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)

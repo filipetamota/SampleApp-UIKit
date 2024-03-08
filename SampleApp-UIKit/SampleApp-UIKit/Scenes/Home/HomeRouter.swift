@@ -16,7 +16,7 @@ protocol HomeDataPassing {
     var dataStore: HomeDataStore? { get }
 }
 
-final class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
+class HomeRouter: NSObject, HomeRoutingLogic, HomeDataPassing {
     weak var viewController: HomeViewController?
     var dataStore: HomeDataStore?
     

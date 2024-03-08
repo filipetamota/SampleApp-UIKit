@@ -16,11 +16,11 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
     var interactor: HomeBusinessLogic?
     var router: (NSObjectProtocol & HomeRoutingLogic & HomeDataPassing)?
     
-    fileprivate var totalResults: Int?
-    fileprivate var totalPages: Int?
-    fileprivate var currentPage: Int = 1
+    var totalResults: Int?
+    var totalPages: Int?
+    var currentPage: Int = 1
+    var tableContent: [SearchResult] = []
     fileprivate var currentQuery: String?
-    fileprivate var tableContent: [SearchResult] = []
     
     // MARK: UI
     
