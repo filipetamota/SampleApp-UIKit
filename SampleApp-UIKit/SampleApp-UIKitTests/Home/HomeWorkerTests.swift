@@ -54,7 +54,7 @@ final class HomeWorkerTests: XCTestCase {
     }
 
     func setupWorker(showError: Bool = false) {
-        sut = HomeWorker()
+        sut = AppHomeWorker()
         let apiClient = APIClientSpy()
         apiClient.showError = showError
         sut.apiClient = apiClient
@@ -66,7 +66,7 @@ extension HomeWorkerTests {
     class APIClientSpy: APIClient {
         var showError: Bool = false
 
-        override func send(request: URLRequest) async throws -> Data {
+        func send(request: URLRequest) async throws -> Data {
             if
                 !showError,
                 let url = Bundle.main.url(forResource: "search_response", withExtension: "json") {

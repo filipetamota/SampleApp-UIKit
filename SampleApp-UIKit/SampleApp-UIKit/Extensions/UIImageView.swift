@@ -16,11 +16,11 @@ extension UIImageView {
         }
         
         guard let url = URL(string: urlString) else { return }
-        URLSession.shared.dataTask( with: url, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask( with: url, completionHandler: { [weak self] (data, response, error) -> Void in
             DispatchQueue.main.async {
                 if let data = data {
                     if let image = UIImage(data: data) {
-                        self.image = image
+                        self?.image = image
                         Utils.cache.setObject(image, forKey: NSString(string: urlString))
                     }
                 }

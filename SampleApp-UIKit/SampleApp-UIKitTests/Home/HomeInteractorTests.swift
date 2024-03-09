@@ -43,8 +43,9 @@ final class HomeInteractorTests: XCTestCase {
 
 extension HomeInteractorTests {
     class HomeWorkerSpy: HomeWorker {
+        var apiClient: APIClient!
         
-        override func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, URLError>) -> Void) {
+        func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, URLError>) -> Void) {
             if request.query == "error" {
                 completion(.failure(URLError(.badServerResponse)))
                 return

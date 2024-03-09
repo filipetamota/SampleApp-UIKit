@@ -8,7 +8,12 @@
 import UIKit
 import CoreData
 
-class DetailWorker {
+protocol DetailWorker {
+    func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void)
+    var apiClient: APIClient! { get set }
+}
+
+final class AppDetailWorker: DetailWorker {
     var apiClient: APIClient!
     
     func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void) {

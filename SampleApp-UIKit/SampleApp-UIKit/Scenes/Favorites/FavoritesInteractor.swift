@@ -36,12 +36,12 @@ final class FavoritesInteractor: FavoritesBusinessLogic, FavoritesDataStore {
     }
     
     func removeFavorite(favId: String) {
-        worker?.deleteFavorite(photoId: favId, completion: { result in
+        worker?.deleteFavorite(photoId: favId, completion: { [weak self] result in
             switch result {
             case .success:
-                self.presenter?.presentDeleteSuccess()
+                self?.presenter?.presentDeleteSuccess()
             case .failure(let error):
-                self.presenter?.presentError(error: error)
+                self?.presenter?.presentError(error: error)
             }
         })
     }

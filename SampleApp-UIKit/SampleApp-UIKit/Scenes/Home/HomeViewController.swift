@@ -55,8 +55,8 @@ final class HomeViewController: BaseViewController, HomeDisplayLogic {
         let interactor = HomeInteractor()
         let presenter = HomePresenter()
         let router = HomeRouter()
-        let worker = HomeWorker()
-        worker.apiClient = APIClient()
+        let worker = AppHomeWorker()
+        worker.apiClient = AppAPIClient()
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter

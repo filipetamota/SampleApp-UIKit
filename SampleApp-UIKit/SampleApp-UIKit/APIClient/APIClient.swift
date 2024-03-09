@@ -28,7 +28,11 @@ enum RequestData {
     }
 }
 
-class APIClient {
+protocol APIClient {
+    func send(request: URLRequest) async throws -> Data
+}
+
+final class AppAPIClient: APIClient {
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
         return URLSession(configuration: config)
@@ -36,7 +40,7 @@ class APIClient {
     
     init() {}
     
-    public func send(request: URLRequest) async throws -> Data {
+    func send(request: URLRequest) async throws -> Data {
         let result = try await session.data(for: request)
         try validate(data: result.0, response: result.1)
         return result.0

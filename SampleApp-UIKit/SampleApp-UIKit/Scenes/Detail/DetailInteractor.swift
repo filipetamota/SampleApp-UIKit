@@ -32,12 +32,12 @@ final class DetailInteractor: DetailBusinessLogic, DetailDataStore {
         {
             self.presenter?.present(savedFavorite: favorite)
         } else {
-            worker?.fetch(request: Detail.Fetch.Request(photoId: photoId, data: .get), completion: { result in
+            worker?.fetch(request: Detail.Fetch.Request(photoId: photoId, data: .get), completion: { [weak self] result in
                 switch result {
                 case .success(let response):
-                    self.presenter?.present(response: response)
+                    self?.presenter?.present(response: response)
                 case .failure(let error):
-                    self.presenter?.present(error: error)
+                    self?.presenter?.present(error: error)
                 }
             })
         }

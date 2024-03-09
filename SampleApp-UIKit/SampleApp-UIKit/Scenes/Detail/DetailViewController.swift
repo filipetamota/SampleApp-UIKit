@@ -92,8 +92,8 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
         let interactor = DetailInteractor()
         let presenter = DetailPresenter()
         let router = DetailRouter()
-        let worker = DetailWorker()
-        worker.apiClient = APIClient()
+        let worker = AppDetailWorker()
+        worker.apiClient = AppAPIClient()
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
@@ -211,8 +211,8 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
     
     @objc private func addRemoveFavorite() {
         guard let result = currentResult, let interactor = interactor else { return }
-        interactor.addRemoveFavorite(favorite: result) { result in
-            self.presentFavoriteAlert(result: result)
+        interactor.addRemoveFavorite(favorite: result) { [weak self] result in
+            self?.presentFavoriteAlert(result: result)
         }
         self.setupBarButton(photoId: result.id)
     }

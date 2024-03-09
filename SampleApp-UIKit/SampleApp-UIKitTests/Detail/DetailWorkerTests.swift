@@ -54,7 +54,7 @@ final class DetailWorkerTests: XCTestCase {
     }
 
     func setupWorker(showError: Bool = false) {
-        sut = DetailWorker()
+        sut = AppDetailWorker()
         let apiClient = APIClientSpy()
         apiClient.showError = showError
         sut.apiClient = apiClient
@@ -66,7 +66,7 @@ extension DetailWorkerTests {
     class APIClientSpy: APIClient {
         var showError: Bool = false
 
-        override func send(request: URLRequest) async throws -> Data {
+        func send(request: URLRequest) async throws -> Data {
             if
                 !showError,
                 let url = Bundle.main.url(forResource: "get_photo", withExtension: "json") {

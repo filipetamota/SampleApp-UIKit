@@ -50,8 +50,9 @@ final class DetailInteractorTests: XCTestCase {
 
 extension DetailInteractorTests {
     class DetailWorkerSpy: DetailWorker {
+        var apiClient: APIClient!
         
-        override func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void) {
+        func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void) {
             if request.photoId == "error" {
                 completion(.failure(URLError(.badServerResponse)))
                 return

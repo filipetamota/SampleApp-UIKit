@@ -7,7 +7,12 @@
 
 import UIKit
 
-class HomeWorker {
+protocol HomeWorker {
+    func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, URLError>) -> Void)
+    var apiClient: APIClient! { get set }
+}
+
+final class AppHomeWorker: HomeWorker {
     var apiClient: APIClient!
 
     func fetch(request: Home.Fetch.Request, completion: @escaping (Result<Home.Fetch.Response, URLError>) -> Void) {

@@ -47,7 +47,7 @@ enum ModelError: Error {
     }
 }
 
-class FavoritesWorker {
+final class FavoritesWorker {
     var context: NSManagedObjectContext?
     
     func getAllFavorites() throws -> [FavoriteItem] {
