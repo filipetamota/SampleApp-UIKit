@@ -45,9 +45,19 @@ final class FavoritesViewController: BaseViewController, FavoritesDisplayLogic {
         let interactor = FavoritesInteractor()
         let presenter = FavoritesPresenter()
         let router = FavoritesRouter()
+        let worker = FavoritesWorker()
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            assertionFailure("Shouldn't enter here")
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
         viewController.interactor = interactor
         viewController.router = router
+        worker.context = managedContext
         interactor.presenter = presenter
+        interactor.worker = worker
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor

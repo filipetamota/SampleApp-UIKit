@@ -6,30 +6,80 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class DetailWorkerTests: XCTestCase {
+    var sut: DetailWorker!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testDetailWorker() throws {
+        let expectation = self.expectation(description: "DetailWorker_Fetch")
+        
+        // GIVEN
+        setupWorker()
+        
+        // WHEN
+        let mockRequest = Detail.Fetch.Request(photoId: "abc123", data: .get)
+        sut.fetch(request: mockRequest) { result in
+            switch result {
+            case .success(_):
+                expectation.fulfill()
+            case .failure(_):
+                XCTFail()
+            }
+        }
+        
+        // THEN
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func testDetailWorkerWithError() throws {
+        let expectation = self.expectation(description: "DetailWorker_FetchWithError")
+        
+        // GIVEN
+        setupWorker(showError: true)
+        
+        // WHEN
+        let mockRequest = Detail.Fetch.Request(photoId: "abc123", data: .get)
+        sut.fetch(request: mockRequest) { result in
+            switch result {
+            case .success(_):
+                XCTFail()
+            case .failure(_):
+                expectation.fulfill()
+            }
+        }
+        
+        // THEN
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func setupWorker(showError: Bool = false) {
+        sut = DetailWorker()
+        let apiClient = APIClientSpy()
+        apiClient.showError = showError
+        sut.apiClient = apiClient
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
+}
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+extension DetailWorkerTests {
+    class APIClientSpy: APIClient {
+        var showError: Bool = false
+
+        override func send(request: URLRequest) async throws -> Data {
+            if
+                !showError,
+                let url = Bundle.main.url(forResource: "get_photo", withExtension: "json") {
+                do {
+                    let data = try Data(contentsOf: url)
+                    return data
+                } catch let e {
+                    throw e
+                }
+                
+                
+            }
+            throw NSError()
         }
     }
-
 }

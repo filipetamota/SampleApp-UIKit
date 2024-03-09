@@ -8,7 +8,8 @@
 import UIKit
 import CoreData
 
-final class DetailWorker {
+class DetailWorker {
+    var apiClient: APIClient!
     
     func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void) {
         
@@ -16,7 +17,6 @@ final class DetailWorker {
             completion(.failure(URLError(.badURL)))
             return
         }
-        let apiClient = APIClient()
         Task {
             do {
                 let dataResponse = try await apiClient.send(request: urlRequest)

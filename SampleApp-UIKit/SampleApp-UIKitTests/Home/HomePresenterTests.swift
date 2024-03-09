@@ -6,16 +6,14 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class HomePresenterTests: XCTestCase {
     var sut: HomePresenter!
 
-    override func setUpWithError() throws {
+    func testHomePresenter() throws {
         // GIVEN
         setupPresenter()
-    }
-
-    func testHomePresenter() throws {
         let vc = HomeDisplayLogicSpy()
         sut.viewController = vc
         
@@ -25,6 +23,8 @@ final class HomePresenterTests: XCTestCase {
     }
     
     func testHomePresenterWithError() throws {
+        // GIVEN
+        setupPresenter()
         let vc = HomeDisplayLogicSpy()
         vc.showError = true
         sut.viewController = vc

@@ -6,30 +6,29 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class DetailVCTests: XCTestCase {
+    var sut: DetailViewController!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        // GIVEN
+        setupViewController()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testDetailVC() throws {
+        // WHEN
+        sut.display(viewModel: Detail.Fetch.ViewModel(result: DetailResult(id: "abc123", width: 100, height: 100, alt_description: nil, description: nil, likes: 678, imgUrl: "", thumbUrl: "", userName: "Test User", equipment: "NIKON D70", location: "London, UK"), error: nil))
+        
+        // THEN
+        XCTAssertNotNil(sut.currentResult)
+        XCTAssertEqual(sut.currentResult?.id, "abc123")
+        XCTAssertEqual(sut.currentResult?.equipment, "NIKON D70")
+        XCTAssertEqual(sut.currentResult?.location, "London, UK")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func setupViewController() {
+        sut = DetailViewController()
     }
 
 }

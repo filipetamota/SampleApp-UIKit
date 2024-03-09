@@ -6,75 +6,37 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class HomeInteractorTests: XCTestCase {
     var sut: HomeInteractor!
     var workerSpy: HomeWorkerSpy!
+    var presenterSpy: HomePresentationLogic!
     
     override func setUpWithError() throws {
-        
         // GIVEN
         setupInteractor()
-        setupWorker()
         XCTAssertNotNil(sut.worker)
+        XCTAssertNotNil(sut.presenter)
     }
 
     func testHomeInteractor() throws {
-        let expectation = self.expectation(description: "HomeInteractor_Fetch")
-        var responseResult: Home.Fetch.Response!
-        
         // WHEN
-        let mockRequest = Home.Fetch.Request(query: "dog", page: 1, data: .search)
-        sut.worker!.fetch(request: mockRequest, completion: { result in
-            switch result {
-            case .success(let response):
-                responseResult = response
-                expectation.fulfill()
-            case .failure(let error):
-                XCTFail("Failed with error \(error)")
-            }
-        })
-        
-        waitForExpectations(timeout: 5, handler: nil)
-
-        // THEN
-        XCTAssertEqual(responseResult.total, 100)
-        XCTAssertEqual(responseResult.total_pages, 10)
-        XCTAssertEqual(responseResult.results.count, 1)
-        XCTAssertEqual(responseResult.results.first!.photoId, "yihlaRCCvd4")
+        sut.fetch(query: "dog", page: 1)
     }
     
     func testHomeInteractorWithError() throws {
-        let expectation = self.expectation(description: "HomeInteractor_FetchWithError")
-        var errorResult: URLError!
-        
         // WHEN
-        let errorRequest = Home.Fetch.Request(query: "error", page: 1, data: .search)
-        sut.worker!.fetch(request: errorRequest, completion: { result in
-            switch result {
-            case .success:
-                XCTFail("Shouldn't enter here")
-            case .failure(let error):
-                errorResult = error
-                expectation.fulfill()
-            }
-        })
-        
-        waitForExpectations(timeout: 5, handler: nil)
-        
-        // THEN
-        XCTAssertEqual(errorResult, URLError(.badServerResponse))
+        sut.fetch(query: "error", page: 1)
     }
     
     func setupInteractor() {
         sut = HomeInteractor()
-    }
-    
-    func setupWorker() {
         workerSpy = HomeWorkerSpy()
         sut.worker = workerSpy
+        presenterSpy = HomePresenterSpy()
+        sut.presenter = presenterSpy
     }
-
 }
 
 extension HomeInteractorTests {
@@ -97,6 +59,21 @@ extension HomeInteractorTests {
             } else {
                 completion(.failure(URLError(.badURL)))
             }
+        }
+    }
+    
+    class HomePresenterSpy: HomePresentationLogic {
+        func present(response: Home.Fetch.Response) {
+            // THEN
+            XCTAssertEqual(response.total, 100)
+            XCTAssertEqual(response.total_pages, 10)
+            XCTAssertEqual(response.results.count, 1)
+            XCTAssertEqual(response.results.first!.photoId, "yihlaRCCvd4")
+        }
+        
+        func present(error: URLError) {
+            // THEN
+            XCTAssertEqual(error, URLError(.badServerResponse))
         }
     }
 }

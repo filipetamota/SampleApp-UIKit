@@ -47,48 +47,37 @@ enum ModelError: Error {
     }
 }
 
-final class FavoritesWorker {
+class FavoritesWorker {
+    var context: NSManagedObjectContext?
     
     func getAllFavorites() throws -> [FavoriteItem] {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { throw ModelError.unknownError }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
         let fetchRequest: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
-        return try managedContext.fetch(fetchRequest)
+        return try context!.fetch(fetchRequest)
     }
     
-    func getFavorite(photoId: String) throws -> [FavoriteItem] {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { throw ModelError.unknownError }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
+    func getFavorite(photoId: String) throws -> FavoriteItem? {
         let fetchRequest: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
+        fetchRequest.fetchLimit = 1
         fetchRequest.predicate = NSPredicate(format: "favId LIKE %@", photoId)
         
-        let objects = try managedContext.fetch(fetchRequest)
-        assert(objects.count < 2, "Should be only one object with id \(photoId)")
-        return objects
+        let object = try context!.fetch(fetchRequest).first
+        return object
     }
     
     func isFavorite(photoId: String) -> Bool {
         do {
-            return try getFavorite(photoId: photoId).count == 1
+            return try getFavorite(photoId: photoId) != nil
         } catch {
             return false
         }
     }
     
     func saveFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            completion(.failure(ModelError.unknownError))
-            return
-        }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        guard let favoriteEntity = NSEntityDescription.entity(forEntityName: "FavoriteItem", in: managedContext) else {
+        guard let favoriteEntity = NSEntityDescription.entity(forEntityName: "FavoriteItem", in: context!) else {
             completion(.failure(ModelError.modelError))
             return
         }
-        let favoriteObject = NSManagedObject(entity: favoriteEntity, insertInto: managedContext)
+        let favoriteObject = NSManagedObject(entity: favoriteEntity, insertInto: context!)
         favoriteObject.setValue(favorite.id, forKey: "favId")
         favoriteObject.setValue(favorite.width, forKey: "width")
         favoriteObject.setValue(favorite.height, forKey: "height")
@@ -102,7 +91,7 @@ final class FavoritesWorker {
         favoriteObject.setValue(favorite.location, forKey: "location")
         
         do {
-            try managedContext.save()
+            try context!.save()
             completion(.success(.add))
         } catch {
             completion(.failure(ModelError.addFavoriteError))
@@ -112,19 +101,17 @@ final class FavoritesWorker {
     }
     
     func deleteFavorite(photoId: String, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            completion(.failure(ModelError.unknownError))
-            return
-        }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "FavoriteItem")
-        deleteFetch.predicate = NSPredicate(format: "favId LIKE %@", photoId)
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-        
+
+        let fetchRequest: NSFetchRequest<FavoriteItem> = FavoriteItem.fetchRequest()
+        fetchRequest.fetchLimit = 1
+        fetchRequest.predicate = NSPredicate(format: "favId LIKE %@", photoId)
+
         do {
-            try managedContext.execute(deleteRequest)
-            try managedContext.save()
+            let result = try context!.fetch(fetchRequest)
+            for object in result {
+                context!.delete(object)
+            }
+            try context!.save()
             completion(.success(.remove))
         } catch {
             completion(.failure(ModelError.removeFavoriteError))

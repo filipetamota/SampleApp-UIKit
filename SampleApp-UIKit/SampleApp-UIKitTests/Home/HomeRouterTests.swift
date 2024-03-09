@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class HomeRouterTests: XCTestCase {
     var sut: HomeRouterSpy!

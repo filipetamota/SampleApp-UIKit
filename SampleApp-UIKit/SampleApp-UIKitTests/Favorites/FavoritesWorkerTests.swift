@@ -6,30 +6,74 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class FavoritesWorkerTests: XCTestCase {
+    var sut: FavoritesWorker!
+    var context = MockPersistentStoreContainer().viewContext
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testSaveFavorite() throws {
+        let expectation = self.expectation(description: "FavoritesWorker_Save")
+        
+        // GIVEN
+        sut = FavoritesWorker()
+        sut.context = context
+
+        // WHEN
+        addFavoriteToContext(worker: sut, expectation: expectation)
+        
+        // THEN
+        waitForExpectations(timeout: 5, handler: nil)
+        let favorites = try sut.getAllFavorites()
+        XCTAssertEqual(favorites.count, 1)
+        let favorite = try sut.getFavorite(photoId: "abc1234")
+        XCTAssertNotNil(favorite)
+        XCTAssertEqual(favorite!.likes, 567)
+        XCTAssertEqual(favorite!.location, "Coimbra, Portugal")
     }
+    
+    func testDeleteFavorite() throws {
+        let saveExpectation = self.expectation(description: "FavoritesWorker_Save")
+        let deleteExpectation = self.expectation(description: "FavoritesWorker_Delete")
+        
+        // GIVEN
+        sut = FavoritesWorker()
+        sut.context = context
+        addFavoriteToContext(worker: sut, expectation: saveExpectation)
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        // WHEN
+        sut.deleteFavorite(photoId: "abc1234") { result in
+            switch result {
+            case .success(let operation):
+                XCTAssertEqual(operation, .remove)
+                deleteExpectation.fulfill()
+            case .failure(_):
+                XCTFail()
+            }
         }
+        
+        // THEN
+        waitForExpectations(timeout: 5, handler: nil)
+        let favorites = try sut.getAllFavorites()
+        XCTAssertEqual(favorites.count, 0)
     }
+    
+    func testIsFavoriteAndGetFavorites() throws {
+        let saveExpectation = self.expectation(description: "FavoritesWorker_Save")
+        
+        // GIVEN
+        sut = FavoritesWorker()
+        sut.context = context
+        
+        // WHEN
+        addFavoriteToContext(worker: sut, expectation: saveExpectation)
+        
+        // THEN
+        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertTrue(sut.isFavorite(photoId: "abc1234"))
+        XCTAssertEqual(try sut.getAllFavorites().count, 1)
+        XCTAssertNotNil(try sut.getFavorite(photoId: "abc1234"))
+    }
+    
 
 }

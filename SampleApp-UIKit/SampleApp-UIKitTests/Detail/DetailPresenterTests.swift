@@ -6,30 +6,54 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class DetailPresenterTests: XCTestCase {
+    var sut: DetailPresenter!
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testDetailPresenter() throws {
+        // GIVEN
+        setupPresenter()
+        let vc = DetailDisplayLogicSpy()
+        sut.viewController = vc
+        
+        // WHEN
+        let response = Detail.Fetch.Response(id: "yihlaRCCvd4", width: 100, height: 100, alt_description: nil, description: nil, likes: 1913, urls: DetailUrls(regular: "", thumb: ""), user: DetailUser(id: "", username: "", name: ""), exif: nil, location: Location(name: "Pagham, UK"))
+        sut.present(response: response)
+    }
+    
+    func testDetailPresenterWithError() throws {
+        // GIVEN
+        setupPresenter()
+        let vc = DetailDisplayLogicSpy()
+        vc.showError = true
+        sut.viewController = vc
+        
+        // WHEN
+        sut.present(error: URLError(.badServerResponse))
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func setupPresenter() {
+        sut = DetailPresenter()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
+}
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+extension DetailPresenterTests {
+    class DetailDisplayLogicSpy: DetailDisplayLogic {
+        var showError: Bool = false
+        
+        func display(viewModel: Detail.Fetch.ViewModel) {
+            // THEN
+            if showError {
+                XCTAssertNotNil(viewModel.error)
+                XCTAssertNil(viewModel.result)
+            } else {
+                XCTAssertNotNil(viewModel.result)
+                XCTAssertEqual(viewModel.result?.id, "yihlaRCCvd4")
+                XCTAssertEqual(viewModel.result?.likes, 1913)
+                XCTAssertEqual(viewModel.result?.location, "Pagham, UK")
+            }
         }
     }
-
 }

@@ -23,7 +23,6 @@ final class FavoritesInteractor: FavoritesBusinessLogic, FavoritesDataStore {
     typealias Response = Favorites.Fetch.Response
   
     func fetch() {
-        worker = FavoritesWorker()
         do {
             let favorites = try worker?.getAllFavorites()
             guard let favorites = favorites else {
@@ -37,7 +36,6 @@ final class FavoritesInteractor: FavoritesBusinessLogic, FavoritesDataStore {
     }
     
     func removeFavorite(favId: String) {
-        worker = FavoritesWorker()
         worker?.deleteFavorite(photoId: favId, completion: { result in
             switch result {
             case .success:

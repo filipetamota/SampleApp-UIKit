@@ -23,16 +23,15 @@ final class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     var worker: DetailWorker?
     var favoritesWorker: FavoritesWorker?
     
+    
     func fetch() {
-        favoritesWorker = FavoritesWorker()
+        setupFavoritesWorker()
         if 
             favoritesWorker?.isFavorite(photoId: photoId) ?? false,
-            let favorites = try? favoritesWorker?.getFavorite(photoId: photoId),
-            favorites.count == 1
+            let favorite = try? favoritesWorker?.getFavorite(photoId: photoId)
         {
-            self.presenter?.present(savedFavorite: favorites.first!)
+            self.presenter?.present(savedFavorite: favorite)
         } else {
-            worker = DetailWorker()
             worker?.fetch(request: Detail.Fetch.Request(photoId: photoId, data: .get), completion: { result in
                 switch result {
                 case .success(let response):
@@ -54,17 +53,27 @@ final class DetailInteractor: DetailBusinessLogic, DetailDataStore {
     }
     
     private func addFavorite(favorite: DetailResult, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
-        favoritesWorker = FavoritesWorker()
+        setupFavoritesWorker()
         favoritesWorker?.saveFavorite(favorite: favorite, completion: completion)
     }
     
     private func deleteFavorite(photoId: String, completion: @escaping (Result<FavoriteOperation, ModelError>) -> Void) {
-        favoritesWorker = FavoritesWorker()
+        setupFavoritesWorker()
         favoritesWorker?.deleteFavorite(photoId: photoId, completion: completion)
     }
     
     func isFavorite(photoId: String) -> Bool {
-        favoritesWorker = FavoritesWorker()
+        setupFavoritesWorker()
         return favoritesWorker?.isFavorite(photoId: photoId) ?? false
+    }
+    
+    private func setupFavoritesWorker() {
+        favoritesWorker = FavoritesWorker()
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            assertionFailure("Shouldn't enter here")
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        favoritesWorker?.context = managedContext
     }
 }

@@ -14,7 +14,7 @@ protocol DetailDisplayLogic: AnyObject {
 final class DetailViewController: BaseViewController, DetailDisplayLogic {
     var interactor: DetailBusinessLogic?
     var router: (NSObjectProtocol & DetailRoutingLogic & DetailDataPassing)?
-    private var currentResult: DetailResult?
+    var currentResult: DetailResult?
     
     // MARK: UI
     
@@ -92,9 +92,12 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
         let interactor = DetailInteractor()
         let presenter = DetailPresenter()
         let router = DetailRouter()
+        let worker = DetailWorker()
+        worker.apiClient = APIClient()
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
+        interactor.worker = worker
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor
@@ -164,13 +167,21 @@ final class DetailViewController: BaseViewController, DetailDisplayLogic {
     }
     
     func display(viewModel: Detail.Fetch.ViewModel) {
-        guard let result = viewModel.result else {
-            assertionFailure("something went wrong")
+        if let error = viewModel.error {
+            DispatchQueue.main.async {
+                self.presentErrorAlert(error: error)
+                self.hideLoadingIndicator()
+            }
             return
-        }
-        currentResult = result
-        DispatchQueue.main.async {
-            self.loadDetail()
+        } else {
+            guard let result = viewModel.result else {
+                assertionFailure("something went wrong")
+                return
+            }
+            currentResult = result
+            DispatchQueue.main.async {
+                self.loadDetail()
+            }
         }
     }
     

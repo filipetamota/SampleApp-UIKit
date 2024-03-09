@@ -8,6 +8,11 @@
 import Foundation
 
 extension FavoriteItem {
+    
+    convenience init() {
+        self.init()
+    }
+    
     func toSearchResult() -> SearchResult? {
         guard
             let id = favId

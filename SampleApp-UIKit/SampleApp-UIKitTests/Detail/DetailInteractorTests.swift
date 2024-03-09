@@ -6,30 +6,83 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class DetailInteractorTests: XCTestCase {
-
+    var sut: DetailInteractor!
+    var workerSpy: DetailWorkerSpy!
+    var presenterSpy: DetailPresentationLogic!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        // GIVEN
+        setupInteractor()
+        XCTAssertNotNil(sut.worker)
+        XCTAssertNotNil(sut.presenter)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testDetailInteractor() throws {
+        // WHEN
+        sut.photoId = "yihlaRCCvd4"
+        sut.fetch()
+    }
+    
+    func testDetailInteractorWithError() throws {
+        // WHEN
+        sut.photoId = "error"
+        sut.fetch()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func setupInteractor() {
+        sut = DetailInteractor()
+        workerSpy = DetailWorkerSpy()
+        presenterSpy = DetailPresenterSpy()
+        sut.worker = workerSpy
+        sut.presenter = presenterSpy
     }
+}
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+extension DetailInteractorTests {
+    class DetailWorkerSpy: DetailWorker {
+        
+        override func fetch(request: Detail.Fetch.Request, completion: @escaping (Result<Detail.Fetch.Response, URLError>) -> Void) {
+            if request.photoId == "error" {
+                completion(.failure(URLError(.badServerResponse)))
+                return
+            }
+            
+            if let url = Bundle.main.url(forResource: "get_photo", withExtension: "json") {
+                do {
+                    let data = try Data(contentsOf: url)
+                    
+                    let photoResponse = try JSONDecoder().decode(Detail.Fetch.Response.self, from: data)
+                    completion(.success(photoResponse))
+                } catch {
+                    completion(.failure(URLError(.unknown)))
+                }
+            } else {
+                completion(.failure(URLError(.badURL)))
+            }
         }
     }
-
+    
+    class DetailPresenterSpy: DetailPresentationLogic {
+        func present(response: Detail.Fetch.Response) {
+            // THEN
+            XCTAssertEqual(response.id, "yihlaRCCvd4")
+            XCTAssertEqual(response.width, 4016)
+            XCTAssertNotNil(response.alt_description)
+            XCTAssertEqual(response.user.name, "Oscar Sutton")
+            XCTAssertEqual(response.exif!.model, "NIKON D750")
+        }
+        
+        func present(savedFavorite: FavoriteItem) {
+            fatalError()
+        }
+        
+        func present(error: Error) {
+            // THEN
+            XCTAssertNotNil(error)
+        }
+    }
 }

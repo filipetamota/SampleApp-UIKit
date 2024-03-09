@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import SampleApp_UIKit
 
 final class HomeWorkerTests: XCTestCase {
     var sut: HomeWorker!
@@ -72,11 +73,9 @@ extension HomeWorkerTests {
                 do {
                     let data = try Data(contentsOf: url)
                     return data
-                } catch let e {
-                    throw e
+                } catch let error {
+                    throw error
                 }
-                
-                
             }
             throw NSError()
         }

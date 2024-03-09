@@ -22,8 +22,6 @@ class HomeInteractor: HomeBusinessLogic, HomeDataStore {
     typealias Request = Home.Fetch.Request
   
     func fetch(query: String, page: Int) {
-        worker = HomeWorker()
-        worker?.apiClient = APIClient()
         worker?.fetch(request: Request(query: query, page: page, data: .search), completion: { result in
             switch result {
             case .success(let response):
