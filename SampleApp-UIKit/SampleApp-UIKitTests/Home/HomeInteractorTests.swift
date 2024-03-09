@@ -9,33 +9,35 @@ import XCTest
 @testable import SampleApp_UIKit
 
 final class HomeInteractorTests: XCTestCase {
-    var sut: HomeInteractor!
-    var workerSpy: HomeWorkerSpy!
-    var presenterSpy: HomePresentationLogic!
+    var sut: HomeInteractor?
+    var workerSpy: HomeWorkerSpy?
+    var presenterSpy: HomePresentationLogic?
     
     override func setUpWithError() throws {
         // GIVEN
-        setupInteractor()
-        XCTAssertNotNil(sut.worker)
-        XCTAssertNotNil(sut.presenter)
+        sut = HomeInteractor()
+        workerSpy = HomeWorkerSpy()
+        sut?.worker = workerSpy
+        presenterSpy = HomePresenterSpy()
+        sut?.presenter = presenterSpy
+        XCTAssertNotNil(sut?.worker)
+        XCTAssertNotNil(sut?.presenter)
+    }
+    
+    override func tearDownWithError() throws {
+        sut = nil
+        workerSpy = nil
+        presenterSpy = nil
     }
 
     func testHomeInteractor() throws {
         // WHEN
-        sut.fetch(query: "dog", page: 1)
+        sut?.fetch(query: "dog", page: 1)
     }
     
     func testHomeInteractorWithError() throws {
         // WHEN
-        sut.fetch(query: "error", page: 1)
-    }
-    
-    func setupInteractor() {
-        sut = HomeInteractor()
-        workerSpy = HomeWorkerSpy()
-        sut.worker = workerSpy
-        presenterSpy = HomePresenterSpy()
-        sut.presenter = presenterSpy
+        sut?.fetch(query: "error", page: 1)
     }
 }
 

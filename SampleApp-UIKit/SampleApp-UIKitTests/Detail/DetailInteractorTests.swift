@@ -9,36 +9,42 @@ import XCTest
 @testable import SampleApp_UIKit
 
 final class DetailInteractorTests: XCTestCase {
-    var sut: DetailInteractor!
-    var workerSpy: DetailWorkerSpy!
-    var presenterSpy: DetailPresentationLogic!
+    var sut: DetailInteractor?
+    var workerSpy: DetailWorkerSpy?
+    var presenterSpy: DetailPresentationLogic?
     
     override func setUpWithError() throws {
         
         // GIVEN
-        setupInteractor()
-        XCTAssertNotNil(sut.worker)
-        XCTAssertNotNil(sut.presenter)
+        sut = DetailInteractor()
+        workerSpy = DetailWorkerSpy()
+        presenterSpy = DetailPresenterSpy()
+        sut?.worker = workerSpy
+        sut?.presenter = presenterSpy
+        XCTAssertNotNil(sut?.worker)
+        XCTAssertNotNil(sut?.presenter)
+    }
+    
+    override func tearDownWithError() throws {
+        sut = nil
+        workerSpy = nil
+        presenterSpy = nil
     }
 
     func testDetailInteractor() throws {
         // WHEN
-        sut.photoId = "yihlaRCCvd4"
-        sut.fetch()
+        sut?.photoId = "yihlaRCCvd4"
+        sut?.fetch()
     }
     
     func testDetailInteractorWithError() throws {
         // WHEN
-        sut.photoId = "error"
-        sut.fetch()
+        sut?.photoId = "error"
+        sut?.fetch()
     }
 
     func setupInteractor() {
-        sut = DetailInteractor()
-        workerSpy = DetailWorkerSpy()
-        presenterSpy = DetailPresenterSpy()
-        sut.worker = workerSpy
-        sut.presenter = presenterSpy
+
     }
 }
 
