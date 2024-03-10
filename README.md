@@ -1,5 +1,6 @@
 # SampleApp-UIKit
-A code sample app using UIKit and the Unsplash API.
+This app was created using the Unsplash API, UIKit, Clean Swift architecture, Core Data for persistence and Concurrency. Includes unit tests.
 
+This code is meant to be used as a sample coding app for future job selections and work opportunities.
 
-Check out the [SWIFTUI version](https://github.com/filipetamota/SampleApp-SwiftUI)!
+Check out the SwiftUI version [here](https://github.com/filipetamota/SampleApp-SwiftUI).
