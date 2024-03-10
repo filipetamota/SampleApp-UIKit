@@ -2,4 +2,4 @@
 A code sample app using UIKit and the Unsplash API.
 
 
-[SWIFTUI Version](https://github.com/filipetamota/SampleApp-SwiftUI)
+Check out the [SWIFTUI version](https://github.com/filipetamota/SampleApp-SwiftUI)!
