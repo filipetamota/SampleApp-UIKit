@@ -1,0 +1,30 @@
+/* 
+  Localizable.strings
+  SampleApp-UIKit
+
+  Created by Filipe Mota on 21/2/24.
+  
+*/
+
+"search_title" = "Search";
+"detail_title" = "Detail";
+"favorites_title" = "Favorites";
+"taken_by" = "Taken by %@";
+"taken_in" = " in %@";
+"taken_with" = " with %@";
+"number_of_likes" = "%d likes";
+"error" = "Error";
+"success" = "Success";
+"favorite_added" = "Favorite added";
+"favorite_removed" = "Favorite removed";
+"remove_favorite" = "Remove favorite";
+"no_favorites" = "No favorites to show.";
+"no_results" = "No results to show.\nDo a search to see some results";
+"author_unknown" = "Author Unknown";
+
+// Errors:
+
+"error_add_favorite" = "Error adding Favorite";
+"error_removed_favorite" = "Error removing Favorite";
+"error_model" = "Model error";
+"error_unknown" = "Unknown error";
