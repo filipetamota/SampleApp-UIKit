@@ -9,32 +9,35 @@ import XCTest
 @testable import SampleApp_UIKit
 
 final class DetailPresenterTests: XCTestCase {
-    var sut: DetailPresenter!
+    var sut: DetailPresenter?
+    
+    override func setUpWithError() throws {
+        // GIVEN
+        sut = DetailPresenter()
+    }
+    
+    override func tearDownWithError() throws {
+        sut = nil
+    }
 
     func testDetailPresenter() throws {
         // GIVEN
-        setupPresenter()
         let vc = DetailDisplayLogicSpy()
-        sut.viewController = vc
+        sut?.viewController = vc
         
         // WHEN
         let response = Detail.Fetch.Response(id: "yihlaRCCvd4", width: 100, height: 100, alt_description: nil, description: nil, likes: 1913, urls: DetailUrls(regular: "", thumb: ""), user: DetailUser(id: "", username: "", name: ""), exif: nil, location: Location(name: "Pagham, UK"))
-        sut.present(response: response)
+        sut?.present(response: response)
     }
     
     func testDetailPresenterWithError() throws {
         // GIVEN
-        setupPresenter()
         let vc = DetailDisplayLogicSpy()
         vc.showError = true
-        sut.viewController = vc
+        sut?.viewController = vc
         
         // WHEN
-        sut.present(error: URLError(.badServerResponse))
-    }
-
-    func setupPresenter() {
-        sut = DetailPresenter()
+        sut?.present(error: URLError(.badServerResponse))
     }
 
 }

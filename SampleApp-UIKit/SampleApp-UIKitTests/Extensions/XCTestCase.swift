@@ -29,8 +29,8 @@ extension XCTestCase {
         }
     }
     
-    func addFavoriteToContext(worker: FavoritesWorker, expectation: XCTestExpectation) {
-        worker.saveFavorite(favorite: DetailResult(id: "abc1234", width: 100, height: 100, alt_description: "", description: "", likes: 567, imgUrl: "", thumbUrl: "", userName: "Test User", equipment: "NIKON D70", location: "Coimbra, Portugal")) { result in
+    func addMockFavoriteToContext(worker: FavoritesWorker?, expectation: XCTestExpectation) {
+        worker?.saveFavorite(favorite: DetailResult(id: "abc1234", width: 100, height: 100, alt_description: "", description: "", likes: 567, imgUrl: "", thumbUrl: "", userName: "Test User", equipment: "NIKON D70", location: "Coimbra, Portugal")) { result in
             switch result {
             case .success(let operation):
                 XCTAssertEqual(operation, .add)

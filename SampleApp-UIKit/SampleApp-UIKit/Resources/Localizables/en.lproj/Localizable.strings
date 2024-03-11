@@ -24,7 +24,7 @@
 
 // Errors:
 
-"error_add_favorite" = "Error adding Favorite";
-"error_removed_favorite" = "Error removing Favorite";
+"error_adding_favorite" = "Error adding Favorite";
+"error_removing_favorite" = "Error removing Favorite";
 "error_model" = "Model error";
 "error_unknown" = "Unknown error";

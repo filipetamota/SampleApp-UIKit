@@ -42,10 +42,6 @@ final class DetailInteractorTests: XCTestCase {
         sut?.photoId = "error"
         sut?.fetch()
     }
-
-    func setupInteractor() {
-
-    }
 }
 
 extension DetailInteractorTests {

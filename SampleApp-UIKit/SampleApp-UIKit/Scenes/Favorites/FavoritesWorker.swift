@@ -21,8 +21,8 @@ enum FavoriteOperation {
     
     func errorAlertMessage() -> String {
         switch self {
-        case .add: return NSLocalizedString("error_add_favorite", comment: "")
-        case .remove: return NSLocalizedString("error_removed_favorite", comment: "")
+        case .add: return NSLocalizedString("error_adding_favorite", comment: "")
+        case .remove: return NSLocalizedString("error_removing_favorite", comment: "")
         }
     }
 }
@@ -36,9 +36,9 @@ enum ModelError: Error {
     func errorMessage() -> String {
         switch self {
         case .addFavoriteError:
-            return NSLocalizedString("error_add_favorite", comment: "")
+            return NSLocalizedString("error_adding_favorite", comment: "")
         case .removeFavoriteError:
-            return NSLocalizedString("error_removed_favorite", comment: "")
+            return NSLocalizedString("error_removing_favorite", comment: "")
         case .modelError:
             return NSLocalizedString("error_model", comment: "")
         case .unknownError:

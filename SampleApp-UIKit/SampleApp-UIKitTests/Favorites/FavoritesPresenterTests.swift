@@ -9,18 +9,32 @@ import XCTest
 @testable import SampleApp_UIKit
 
 final class FavoritesPresenterTests: XCTestCase {
-    var sut: FavoritesPresenter!
-    var vcSpy: FavoritesDisplayLogicSpy!
+    var sut: FavoritesPresenter?
+    var vcSpy: FavoritesDisplayLogicSpy?
     var context = MockPersistentStoreContainer().viewContext
+    
+    override func setUpWithError() throws {
+        // GIVEN
+        sut = FavoritesPresenter()
+    }
+    
+    override func tearDownWithError() throws {
+        sut = nil
+        vcSpy = nil
+    }
 
     func testFavoritesPresenter() throws {
         let saveExpectation = self.expectation(description: "FavoritesPresenter_Save")
         
         // GIVEN
-        setupPresenter()
+        let vc = FavoritesDisplayLogicSpy()
+        vc.showError = false
+        sut?.viewController = vc
+        vcSpy = vc
+
         let worker = FavoritesWorker()
         worker.context = context
-        addFavoriteToContext(worker: worker, expectation: saveExpectation)
+        addMockFavoriteToContext(worker: worker, expectation: saveExpectation)
         guard let favorite = try worker.getFavorite(photoId: "abc1234") else {
             XCTFail()
             return
@@ -28,27 +42,22 @@ final class FavoritesPresenterTests: XCTestCase {
         waitForExpectations(timeout: 5, handler: nil)
         
         // WHEN
-        sut.presentResults(response: Favorites.Fetch.Response(results: [favorite]))
+        sut?.presentResults(response: Favorites.Fetch.Response(results: [favorite]))
     }
     
     func testFavoritesPresenterWithError() throws {
         // GIVEN
-        setupPresenter(showError: true)
+        let vc = FavoritesDisplayLogicSpy()
+        vc.showError = true
+        sut?.viewController = vc
+        vcSpy = vc
+
         let worker = FavoritesWorker()
         worker.context = context
         
         // WHEN
-        sut.presentError(error: .modelError)
+        sut?.presentError(error: .modelError)
     }
-
-    func setupPresenter(showError: Bool = false) {
-        sut = FavoritesPresenter()
-        let vc = FavoritesDisplayLogicSpy()
-        vc.showError = showError
-        sut.viewController = vc
-        vcSpy = vc
-    }
-
 }
 
 extension FavoritesPresenterTests {

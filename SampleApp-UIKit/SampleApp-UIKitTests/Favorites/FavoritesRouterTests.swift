@@ -9,26 +9,30 @@ import XCTest
 @testable import SampleApp_UIKit
 
 final class FavoritesRouterTests: XCTestCase {
-    var sut: FavoritesRouterSpy!
+    var sut: FavoritesRouterSpy?
+    
+    override func setUpWithError() throws {
+        // GIVEN
+        sut = FavoritesRouterSpy()
+    }
+    
+    override func tearDownWithError() throws {
+        sut = nil
+    }
 
     func testRouterToDetail() throws {
         // GIVEN
-        setupRouter()
         let sourceVC = FavoritesViewController()
         let sourceInteractor = FavoritesInteractor()
         sourceInteractor.favId = "abc123"
-        sut.dataStore = sourceInteractor
+        sut?.dataStore = sourceInteractor
         
         // WHEN
-        sut.routeToDetail(source: sourceVC)
+        sut?.routeToDetail(source: sourceVC)
         
         // THEN
-        XCTAssertTrue(sut.didNavigate)
-        XCTAssertTrue(sut.didPassData)
-    }
-
-    func setupRouter() {
-        sut = FavoritesRouterSpy()
+        XCTAssertTrue(sut?.didNavigate ?? false)
+        XCTAssertTrue(sut?.didPassData ?? false)
     }
 }
 

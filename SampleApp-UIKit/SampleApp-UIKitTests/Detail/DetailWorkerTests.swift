@@ -9,7 +9,16 @@ import XCTest
 @testable import SampleApp_UIKit
 
 final class DetailWorkerTests: XCTestCase {
-    var sut: DetailWorker!
+    var sut: DetailWorker?
+    
+    override func setUpWithError() throws {
+        // GIVEN
+        sut = AppDetailWorker()
+    }
+    
+    override func tearDownWithError() throws {
+        sut = nil
+    }
 
     func testDetailWorker() throws {
         let expectation = self.expectation(description: "DetailWorker_Fetch")
@@ -19,7 +28,7 @@ final class DetailWorkerTests: XCTestCase {
         
         // WHEN
         let mockRequest = Detail.Fetch.Request(photoId: "abc123", data: .get)
-        sut.fetch(request: mockRequest) { result in
+        sut?.fetch(request: mockRequest) { result in
             switch result {
             case .success(_):
                 expectation.fulfill()
@@ -40,7 +49,7 @@ final class DetailWorkerTests: XCTestCase {
         
         // WHEN
         let mockRequest = Detail.Fetch.Request(photoId: "abc123", data: .get)
-        sut.fetch(request: mockRequest) { result in
+        sut?.fetch(request: mockRequest) { result in
             switch result {
             case .success(_):
                 XCTFail()
@@ -54,10 +63,9 @@ final class DetailWorkerTests: XCTestCase {
     }
 
     func setupWorker(showError: Bool = false) {
-        sut = AppDetailWorker()
         let apiClient = APIClientSpy()
         apiClient.showError = showError
-        sut.apiClient = apiClient
+        sut?.apiClient = apiClient
     }
 
 }
