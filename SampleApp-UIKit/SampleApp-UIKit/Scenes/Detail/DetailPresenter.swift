@@ -34,7 +34,7 @@ final class DetailPresenter: DetailPresentationLogic {
     }
     
     func present(savedFavorite: FavoriteItem) {
-        let viewModel = ViewModel(result: savedFavorite.toDetailResult(), error: nil)
+        let viewModel = ViewModel(result: savedFavorite.toDetailResult, error: nil)
         viewController?.display(viewModel: viewModel)
     }
     

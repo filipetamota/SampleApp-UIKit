@@ -9,11 +9,7 @@ import Foundation
 
 extension FavoriteItem {
     
-    convenience init() {
-        self.init()
-    }
-    
-    func toSearchResult() -> SearchResult? {
+    var toSearchResult: SearchResult? {
         guard
             let id = favId
         else {
@@ -22,10 +18,9 @@ extension FavoriteItem {
         }
         
         return SearchResult(photoId: id, alt_description: alt_description, likes: Int(likes), thumbUrl: thumbUrl ?? "", userName: userName ?? NSLocalizedString("author_unknown", comment: ""))
-            
     }
     
-    func toDetailResult() -> DetailResult? {
+    var toDetailResult: DetailResult? {
         guard
             let id = favId
         else {

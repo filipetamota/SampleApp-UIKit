@@ -144,7 +144,7 @@ extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: ResultCell.identifier, for: indexPath) as? ResultCell,
-            let result = self.tableContent?[indexPath.row].toSearchResult()
+            let result = self.tableContent?[indexPath.row].toSearchResult
         else {
             assertionFailure("should not enter here")
             return UITableViewCell()
